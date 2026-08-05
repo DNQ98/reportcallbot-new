@@ -1,20 +1,17 @@
-# reportcallbot-new — Mockup Báo cáo & Dashboard Callbot (MAFC Happy Call)
+# reportcallbot-new — Mockup Báo cáo Callbot (MAFC Happy Call)
 
-Mockup nâng cấp màn **Báo cáo** của một phiên Callbot (OMICRM) theo yêu cầu **FR-030** cho dự án **MAFC VoiceBot Happy Call** — bổ sung góc quản trị vận hành.
+Mockup màn **Báo cáo** của phiên Callbot (OMICRM) cho dự án **MAFC VoiceBot Happy Call** — cấu trúc **3 dashboard** theo góp ý đối tác (FR-030).
 
 ## Nội dung
 - `index.html` — mockup tương tác (tự chứa, mở bằng trình duyệt là chạy).
 - `MAFC-BaoCao-Dashboard-FR030.html` — bản sao cùng nội dung (tên mô tả).
 
-## Phần nâng cấp (đánh dấu viền vàng "NÂNG CẤP" + mã FR)
-- **KPI vận hành**: Tổng hợp đồng / Đã gọi / Đang pending (+ thời gian) / Tỉ lệ kết nối / Hoàn thành xác minh / TAT — FR-030 (i)(ii), FR-033
-- **Báo cáo theo Action Code & Reason Code** — bảng 2 tầng đầy đủ 16 mã (kèm Chuyển NV / Spin) — FR-030 (iii)
-- **Theo trạng thái cuộc gọi** (RONA/NCON/voicemail…) — FR-030 (v), FR-009
-- **Theo nhóm sản phẩm** (Tiền mặt / Trả góp / Dịch vụ)
-- **Pending chi tiết** theo mốc thời gian — FR-033
-- **Lịch sử theo Hợp đồng/SĐT + số lần gọi** — FR-030 (iv), FR-031
+## 3 Dashboard (chuyển tab)
+1. **CDR — Lịch sử cuộc gọi** (mức cuộc gọi · 25 trường): ID cuộc gọi, Mã hợp đồng, SĐT, Đầu số gọi ra, Mã chiến dịch, CLI, Trạng thái, SIP, thời điểm bắt đầu/bắt máy/kết thúc, thời lượng gọi/đàm thoại, Call Result, Person Contacted, Action Code, Reason Code, số tiền/mục đích bóc tách, thời gian hẹn gọi lại, Transcript, Recording URL, số lần gọi, Spin, Human T+1.
+2. **Theo Khách hàng** (mức KH · 12 trường): Họ tên, Mã KH, SĐT, Số lần gọi, **Last action code** (trạng thái kết thúc trong flow — nhiều cuộc lấy "xa" nhất theo thứ tự khai báo trong bộ trạng thái khách hàng), **Best action code** (trạng thái đánh dấu "best"; không có thì lấy Last) — cả hai gồm Action + Reason, ngày sinh, giới tính, loại SP, tên SP/DV, ngày giải ngân, số tiền giải ngân.
+3. **Báo cáo Callbot (NLU)**: usersay (Speech-to-Text), intent, entity, độ tương thích intent/entity từng câu, WER (% sai STT), tốc độ phản hồi bot (≤ 3s) — bám NFR-001..004.
 
-> Phạm vi: báo cáo mức **một phiên**. Số liệu trong mockup là minh họa. Giữ nguyên 4 sub-tab phân tích hội thoại hiện có của OMICRM.
+> Số liệu trong mockup là minh họa. Bộ trạng thái khách hàng (2 cấp Action/Reason, thứ tự + cờ "best") do đối tác khai báo ở module Khách hàng của OMI.
 
 ## Xem online
 Bật **GitHub Pages** (Settings → Pages → branch `main`) rồi mở `https://dnq98.github.io/reportcallbot-new/`.

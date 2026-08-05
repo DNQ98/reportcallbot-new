@@ -3,164 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mockup nâng cấp · Báo cáo Callbot MAFC (FR-030)</title>
+<title>Báo cáo Callbot MAFC — 3 Dashboard (FR-030)</title>
 <style>
   :root{
-    --bg:#F1F4F8; --card:#FFFFFF; --ink:#1E2A3A; --sub:#5B6675; --label:#6B7480;
-    --line:#E6EBF1; --line2:#D9E0E8;
-    --blue:#2F80ED; --blue-soft:#EAF2FE;
+    --bg:#EEF2F7; --card:#FFFFFF; --ink:#1E2A3A; --sub:#5B6675; --label:#6B7480;
+    --line:#E4E9EF; --line2:#D6DEE7;
+    --blue:#2F80ED; --blue-soft:#E7F0FC;
     --green:#1BA85C; --green-soft:#E7F6EE;
-    --amber:#E7A32C; --amber-soft:#FDF3E1;
-    --red:#E4574C; --red-soft:#FCECEA;
-    --grey:#8A96A3; --grey-soft:#EEF1F5;
-    --pink:#E93D82; --pink-soft:#FDEBF2;
-    --violet:#6C5CE7;
-    --up:#F59E0B; --up-bg:#FFFBEB; --up-line:#F5C560; --up-badge-bg:#FEF3C7; --up-badge-tx:#8A5A00;
+    --amber:#C77C10; --amber-soft:#FBF0DC;
+    --red:#D8453B; --red-soft:#FBE7E5;
+    --grey:#8A96A3; --grey-soft:#EDF0F3;
+    --violet:#7C5CE0; --teal:#0E9C93;
     --rail:#1E2A3A;
-    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Be Vietnam Pro",Arial,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.45;font-variant-numeric:tabular-nums;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;}
+  .wrap{max-width:1320px;margin:0 auto;padding:18px 20px 70px;}
 
-  .anno{position:sticky;top:0;z-index:50;background:#0F1620;color:#fff;padding:11px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
-  .anno b{font-weight:680;}
-  .anno .leg{display:flex;align-items:center;gap:7px;color:#C7D0DA;}
-  .swatch{width:14px;height:14px;border-radius:4px;}
-  .swatch.exist{background:#fff;border:1px solid #4A5666;}
-  .swatch.up{background:var(--up-bg);border:1.5px dashed var(--up);}
-  .anno .fr{font-family:var(--mono);font-size:11px;background:#22303F;padding:2px 7px;border-radius:5px;color:#9FE6BE;margin-left:auto;}
-
-  .wrap{max-width:1280px;margin:0 auto;padding:20px 22px 70px;}
-
-  /* header tabs */
-  .htabs{display:flex;align-items:center;gap:26px;border-bottom:1px solid var(--line);padding:0 4px;margin-bottom:18px;}
-  .htabs .back{width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:#4A5666;margin:6px 6px 6px 0;}
-  .htabs a{padding:16px 2px;font-size:15px;color:var(--sub);position:relative;display:flex;align-items:center;gap:7px;}
+  .htabs{display:flex;align-items:center;gap:24px;border-bottom:1px solid var(--line);padding:0 4px;margin-bottom:16px;}
+  .htabs .back{width:36px;height:36px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:#4A5666;margin:6px 6px 6px 0;}
+  .htabs a{padding:15px 2px;font-size:14.5px;color:var(--sub);position:relative;display:flex;align-items:center;gap:6px;}
   .htabs a.on{color:var(--ink);font-weight:680;}
   .htabs a.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2.5px;background:var(--blue);border-radius:2px;}
 
   .subtabs{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-  .subtabs .pill{padding:9px 16px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--sub);background:#fff;border:1px solid var(--line);cursor:pointer;}
+  .subtabs .pill{padding:9px 15px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--sub);background:#fff;border:1px solid var(--line);cursor:pointer;display:flex;align-items:center;gap:7px;}
   .subtabs .pill.on{background:var(--rail);color:#fff;border-color:var(--rail);}
-  .subtabs .dl{margin-left:auto;color:var(--blue);border:1px solid var(--blue);background:#fff;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;display:flex;gap:7px;align-items:center;cursor:pointer;}
+  .subtabs .pill .n{font-family:var(--mono);font-size:10px;opacity:.7;}
+  .subtabs .dl{margin-left:auto;color:var(--blue);border:1px solid var(--blue);background:#fff;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;}
 
-  .filt{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:18px;flex-wrap:wrap;}
-  .filt .f{display:flex;align-items:center;gap:6px;color:var(--sub);font-size:13.5px;padding:5px 10px;border-radius:8px;}
-  .filt .f.up{background:var(--up-bg);border:1px dashed var(--up-line);color:#7A4F00;font-weight:600;}
+  .filt{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 13px;margin-bottom:16px;flex-wrap:wrap;}
+  .filt .f{display:flex;align-items:center;gap:5px;color:var(--sub);font-size:13px;padding:5px 9px;border-radius:8px;background:#F6F8FB;}
+  .filt .cnt{margin-left:auto;color:var(--label);font-size:12.5px;}
 
-  h2.sec{font-size:15px;margin:26px 0 12px;font-weight:700;display:flex;align-items:center;gap:10px;}
-  .frtag{background:var(--up-badge-bg);color:var(--up-badge-tx);font-family:var(--mono);font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;border:1px solid var(--up-line);}
-  .propose{background:var(--blue-soft);color:var(--blue);font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
+  .pane{display:none;} .pane.on{display:block;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.03);}
 
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 1px 3px rgba(16,24,40,.04);}
-  .grid{display:grid;gap:16px;}
-
-  /* EXISTING overview row (compact) */
-  .exrow{grid-template-columns:1.1fr 1fr 1.4fr;}
-  .donut-wrap{display:flex;align-items:center;gap:18px;}
-  .donut{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;flex:none;}
-  .donut .inner{width:70px;height:70px;background:#fff;border-radius:50%;display:grid;place-items:center;font-size:19px;font-weight:800;}
-  .k-lite{color:var(--sub);font-size:12.5px;}
-  .big{font-size:30px;font-weight:800;letter-spacing:-.02em;}
-  .rowbtw{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-top:6px;}
-  .camp3{display:flex;gap:26px;}
-  .camp3 .c .n{font-size:24px;font-weight:800;}
-  .camp3 .c small{font-size:12px;}
-  .chan{grid-template-columns:repeat(4,1fr);margin-top:14px;}
-  .chan .ch{border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
-  .chan .ch .h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;}
-  .chan .ch .ic{width:26px;height:26px;border-radius:8px;background:var(--pink);color:#fff;display:grid;place-items:center;font-size:13px;}
-  .chan .ch .r{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-top:8px;}
-
-  /* KPI tiles (upgrade) */
-  .kpis{grid-template-columns:repeat(6,1fr);}
-  @media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr);} .exrow{grid-template-columns:1fr;} .chan{grid-template-columns:1fr 1fr;}}
-  .kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;position:relative;overflow:hidden;}
-  .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--blue));}
+  /* KPI tiles */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+  @media(max-width:900px){.kpis{grid-template-columns:1fr 1fr;}}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 16px;position:relative;overflow:hidden;}
+  .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac,var(--blue));}
   .kpi .kl{font-size:11.5px;color:var(--label);font-weight:600;}
-  .kpi .kv{font-size:27px;font-weight:800;letter-spacing:-.02em;margin-top:6px;line-height:1;}
+  .kpi .kv{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:5px;line-height:1;}
   .kpi .kv small{font-size:13px;color:var(--sub);font-weight:600;}
-  .kpi .kd{font-size:11.5px;color:var(--sub);margin-top:6px;}
-  .kpi.b{--accent:var(--blue);} .kpi.g{--accent:var(--green);} .kpi.a{--accent:var(--amber);} .kpi.r{--accent:var(--red);} .kpi.v{--accent:var(--violet);} .kpi.k{--accent:var(--grey);}
+  .kpi .kd{font-size:11px;margin-top:6px;}
+  .ok{color:var(--green);} .warn{color:var(--amber);}
+  .kpi.g::before{background:var(--green);} .kpi.b::before{background:var(--blue);} .kpi.v::before{background:var(--violet);} .kpi.t::before{background:var(--teal);}
 
-  /* bars */
-  .barrow{display:flex;align-items:center;gap:12px;font-size:13px;margin:8px 0;}
-  .barrow .lb{width:190px;flex:none;color:var(--ink);display:flex;align-items:center;gap:8px;}
-  .barrow .code{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:6px;background:var(--grey-soft);color:#41506A;}
-  .barrow .track{flex:1;height:22px;background:var(--grey-soft);border-radius:6px;overflow:hidden;}
-  .barrow .fill{height:100%;border-radius:6px;}
-  .barrow .num{width:88px;flex:none;text-align:right;font-weight:700;font-size:13px;}
-  .barrow .num small{color:var(--sub);font-weight:500;}
-  .c-green{background:var(--green);} .c-amber{background:var(--amber);} .c-red{background:var(--red);} .c-blue{background:var(--blue);} .c-grey{background:var(--grey);} .c-violet{background:var(--violet);}
-  .tag-g{color:var(--green);background:var(--green-soft);} .tag-a{color:#9A6B12;background:var(--amber-soft);} .tag-r{color:var(--red);background:var(--red-soft);} .tag-b{color:var(--blue);background:var(--blue-soft);} .tag-k{color:#41506A;background:var(--grey-soft);}
-  .c-teal{background:#0E9C93;}
-  .rtbl{width:100%;border-collapse:collapse;font-size:12.5px;}
-  .rtbl th{color:#7A8794;font-size:11px;font-weight:600;text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);background:#FAFBFC;}
-  .rtbl td{padding:7px 12px;border-bottom:1px solid #F0F3F7;vertical-align:middle;}
-  .rtbl tr.tier td{background:#EEF2F6;font-weight:700;font-size:11px;color:#41506A;letter-spacing:.02em;}
-  .rtbl tr:hover:not(.tier) td{background:#F6F9FC;}
-  .rtbl .rc{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;}
-  .rtbl td.n{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .rtbl td.n small{color:var(--sub);font-weight:500;}
-  .rtbl .mb{height:9px;background:#EEF2F6;border-radius:5px;overflow:hidden;min-width:74px;display:block;}
-  .rtbl .mb>span{display:block;height:100%;border-radius:5px;}
-  .rtag{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 6px;border-radius:5px;}
-  .rtag.nv{color:#B23A2E;background:#FBE7E5;} .rtag.s2{color:#2F7BE0;background:#E7F0FC;}
-  .proptag{font-family:var(--mono);font-size:8.5px;font-weight:700;color:#8A5A00;background:#FEF3C7;border:1px solid #F5C560;padding:1px 5px;border-radius:5px;}
+  /* tables */
+  .tscroll{overflow-x:auto;border-radius:14px;border:1px solid var(--line);background:#fff;}
+  table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap;}
+  th,td{border-bottom:1px solid #F0F3F7;padding:9px 11px;text-align:left;vertical-align:middle;}
+  th{color:#6B7683;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:#F7F9FC;position:sticky;top:0;z-index:2;}
+  tbody tr:hover td{background:#F6F9FC;}
+  td.stick,th.stick{position:sticky;left:0;background:#fff;z-index:1;box-shadow:1px 0 0 var(--line);}
+  th.stick{background:#F7F9FC;z-index:3;}
+  .grp{color:var(--blue);font-weight:700;font-size:10px;letter-spacing:.04em;}
 
-  .two{grid-template-columns:1fr 1fr;}
-  @media(max-width:1000px){.two{grid-template-columns:1fr;}}
+  .code{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;}
+  .c-g{color:var(--green);background:var(--green-soft);} .c-a{color:var(--amber);background:var(--amber-soft);}
+  .c-r{color:var(--red);background:var(--red-soft);} .c-b{color:var(--blue);background:var(--blue-soft);}
+  .c-k{color:#41506A;background:var(--grey-soft);} .c-v{color:var(--violet);background:#EEEAFC;} .c-t{color:var(--teal);background:#E1F5F3;}
+  .st{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;display:inline-block;}
+  .link{color:var(--blue);cursor:pointer;font-weight:600;}
+  .play{display:inline-flex;align-items:center;gap:5px;color:var(--blue);cursor:pointer;font-family:var(--mono);font-size:10.5px;}
+  .play .b{width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:8px;}
+  .badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 6px;border-radius:5px;}
+  .b-nv{color:#B23A2E;background:#FBE7E5;} .b-s2{color:#2F7BE0;background:#E7F0FC;} .b-s1{color:#7A8794;background:#EDF0F3;}
+  .num{text-align:right;font-weight:700;}
+  .dim{color:#B4BEC9;}
+  .pct{font-family:var(--mono);font-weight:700;}
+  .bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-left:6px;}
 
-  /* status donut via conic */
-  .sdonut{display:flex;align-items:center;gap:22px;}
-  .ring{width:150px;height:150px;border-radius:50%;flex:none;position:relative;}
-  .ring .hole{position:absolute;inset:26px;background:#fff;border-radius:50%;display:grid;place-items:center;text-align:center;}
-  .ring .hole b{font-size:22px;font-weight:800;} .ring .hole small{font-size:11px;color:var(--sub);}
-  .legend{display:flex;flex-direction:column;gap:8px;font-size:13px;}
-  .legend .li{display:flex;align-items:center;gap:9px;}
-  .legend .dot{width:11px;height:11px;border-radius:3px;flex:none;}
-  .legend .li .v{margin-left:auto;font-weight:700;color:var(--ink);padding-left:16px;}
-  .legend .li .p{color:var(--sub);width:44px;text-align:right;}
-
-  /* fraud card */
-  .fraud{background:linear-gradient(180deg,#FEF6F4,#fff);border:1px solid #F3C8C1;}
-  .fraud .fh{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--red);font-size:14px;}
-  .fraud .fg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px;}
-  .fraud .fb{border:1px solid #F3C8C1;border-radius:11px;padding:12px;background:#fff;}
-  .fraud .fb .n{font-size:24px;font-weight:800;color:var(--red);}
-  .fraud .fb .l{font-size:11.5px;color:var(--sub);margin-top:3px;} .fraud .fb .c{font-family:var(--mono);font-size:10px;color:var(--red);}
-
-  table{border-collapse:collapse;width:100%;font-size:13px;}
-  .tscroll{overflow-x:auto;}
-  th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:middle;}
-  th{color:#7A8794;font-size:12px;font-weight:600;background:#FAFBFC;position:sticky;top:0;}
-  td .code{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:6px;}
-  .pill-s{font-size:11.5px;padding:3px 9px;border-radius:20px;font-weight:600;display:inline-block;}
-  .callcount{font-family:var(--mono);font-weight:700;}
-
-  .up-note{font-size:11.5px;color:#946A1A;margin-top:10px;}
-  .prod{display:flex;flex-direction:column;gap:14px;}
-  .prodbar{display:flex;align-items:center;gap:12px;font-size:13px;}
-  .prodbar .lb{width:150px;flex:none;font-weight:600;}
-  .prodbar .track{flex:1;height:26px;background:var(--grey-soft);border-radius:7px;overflow:hidden;display:flex;}
-  .seg{height:100%;display:grid;place-items:center;color:#fff;font-size:10.5px;font-weight:700;}
-
-  .pendrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-  .pendrow .pb{border:1px solid var(--line);border-radius:11px;padding:13px;}
-  .pendrow .pb .n{font-size:22px;font-weight:800;} .pendrow .pb .l{font-size:11.5px;color:var(--sub);margin-top:3px;}
+  .note{font-size:12px;color:var(--sub);background:#F6F8FB;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:12px;line-height:1.5;}
+  .note b{color:var(--ink);}
+  .lvl{font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:5px;background:#EEF2F6;color:#41506A;}
+  h3.sec{font-size:14px;margin:0 0 10px;font-weight:700;}
+  .anno{background:#0F1620;color:#C7D0DA;font-size:12px;padding:9px 20px;font-family:var(--mono);}
+  .anno b{color:#9FE6BE;}
 </style>
 </head>
 <body>
 
 
-<div class="anno">
-  <b>Mockup nâng cấp — Báo cáo Callbot MAFC</b>
-  <span class="leg"><span class="swatch exist"></span> Giữ nguyên (OMICRM)</span>
-  <span class="leg"><span class="swatch up"></span> Nâng cấp (FR-030)</span>
-  <span class="fr">FR-030 / 031 / 033</span>
-</div>
+<div class="anno">Mockup Báo cáo Callbot MAFC · <b>3 Dashboard</b> theo góp ý đối tác · FR-030 — số liệu minh họa</div>
 
 <div class="wrap">
   <div class="htabs">
@@ -172,158 +102,202 @@
   </div>
 
   <div class="subtabs">
-    <span class="pill on">Tổng quan</span>
-    <span class="pill">Dữ liệu thu thập</span>
-    <span class="pill">Marketing</span>
-    <span class="pill">Dữ liệu đã phân tích</span>
+    <span class="pill on" data-tab="cdr">📞 CDR — Lịch sử cuộc gọi <span class="n">25 trường</span></span>
+    <span class="pill" data-tab="kh">👤 Theo Khách hàng <span class="n">12 trường</span></span>
+    <span class="pill" data-tab="nlu">🤖 Báo cáo Callbot (NLU) </span>
     <span class="dl">⬇ Tải về Excel</span>
   </div>
 
   <div class="filt">
-    <span class="f">⏱ Thời gian: 01/08/2026 – 03/08/2026 ▾</span>
-    <span class="f up">🏷 Nhóm sản phẩm ▾</span>
-    <span class="f up">Action Code ▾</span>
-    <span class="f up">Reason Code ▾</span>
-    <span class="f up">Trạng thái cuộc gọi ▾</span>
+    <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
+    <span class="f">Mã chiến dịch ▾</span>
+    <span class="f">Trạng thái cuộc gọi ▾</span>
+    <span class="f">Action / Reason Code ▾</span>
+    <span class="cnt" id="cnt">102 cuộc gọi</span>
   </div>
 
-  <!-- ===== EXISTING OVERVIEW (giữ nguyên) ===== -->
-  <div class="grid exrow">
-    <div class="card">
-      <div class="k-lite" style="margin-bottom:12px">Tỷ lệ hoàn thành</div>
-      <div class="donut-wrap">
-        <div class="donut" style="background:conic-gradient(var(--green) 0 47%, #EAECEF 47% 100%)"><div class="inner">47%</div></div>
-        <div><div class="big">1.510</div><div class="k-lite">cuộc xác minh hoàn tất (COR)</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="k-lite">Cuộc gọi</div>
-      <div class="big" style="margin-top:6px">2.940</div>
-      <div class="rowbtw"><span>Trả lời</span><b style="color:var(--green)">2.176</b></div>
-      <div class="rowbtw"><span>Không trả lời</span><b style="color:var(--red)">764</b></div>
-    </div>
-    <div class="card">
-      <div class="k-lite" style="margin-bottom:10px">Trạng thái chiến dịch</div>
-      <div class="camp3">
-        <div class="c"><div class="n" style="color:var(--green)">2.940</div><small style="color:var(--green)">hoàn thành</small></div>
-        <div class="c"><div class="n" style="color:var(--red)">0</div><small style="color:var(--red)">đã hủy</small></div>
-        <div class="c"><div class="n" style="color:var(--amber)">260</div><small style="color:var(--amber)">đang trì hoãn</small></div>
-      </div>
-    </div>
-  </div>
-  <div class="grid chan">
-    <div class="ch card" style="padding:0"><div style="padding:12px 14px"><div class="h"><span class="ic">💬</span> SMS</div><div class="r"><span>Thành công</span><b>—</b></div><div class="r"><span>Thất bại</span><b>—</b></div></div></div>
-    <div class="ch card" style="padding:0"><div style="padding:12px 14px"><div class="h"><span class="ic">✉️</span> Email</div><div class="r"><span>Thành công</span><b>—</b></div><div class="r"><span>Thất bại</span><b>—</b></div></div></div>
-    <div class="ch card" style="padding:0"><div style="padding:12px 14px"><div class="h"><span class="ic">🔔</span> ZNS</div><div class="r"><span>Thành công</span><b>—</b></div><div class="r"><span>Thất bại</span><b>—</b></div></div></div>
-    <div class="ch card" style="padding:0"><div style="padding:12px 14px"><div class="h"><span class="ic">📞</span> Gọi tự động</div><div class="r"><span>Trả lời</span><b>2.176</b></div><div class="r"><span>Không trả lời</span><b>764</b></div></div></div>
-  </div>
-
-  <!-- ===== UPGRADE: KPI vận hành ===== -->
-  <h2 class="sec"><span class="frtag">NÂNG CẤP · FR-030 (i)(ii) · FR-033</span> KPI vận hành Happy Call</h2>
-  <div class="grid kpis">
-    <div class="kpi k"><div class="kl">Tổng hợp đồng nhận</div><div class="kv">3.200</div><div class="kd">nạp trong kỳ</div></div>
-    <div class="kpi b"><div class="kl">Đã gọi</div><div class="kv">2.940</div><div class="kd">91,9% danh sách</div></div>
-    <div class="kpi a"><div class="kl">Đang pending</div><div class="kv">260</div><div class="kd">TB chờ 4,2 giờ</div></div>
-    <div class="kpi v"><div class="kl">Tỉ lệ kết nối</div><div class="kv">74<small>%</small></div><div class="kd">2.176 / 2.940</div></div>
-    <div class="kpi g"><div class="kl">Hoàn thành xác minh</div><div class="kv">1.510</div><div class="kd">COR/CP · 51,4% cuộc nối</div></div>
-    <div class="kpi g"><div class="kl">TAT ≤ 3 ngày</div><div class="kv">92<small>%</small></div><div class="kd">đạt trạng thái cuối</div></div>
-  </div>
-
-  <!-- ===== UPGRADE: Action / Reason Code ===== -->
-  <h2 class="sec"><span class="frtag">NÂNG CẤP · FR-030 (iii)</span> Báo cáo theo Action Code &amp; Reason Code</h2>
-  <div class="card" style="padding:0">
-    <div class="tscroll"><table class="rtbl">
-      <thead><tr><th>Reason</th><th>Action Code</th><th>Tên mã (Code HC New)</th><th class="n">Số cuộc</th><th>Tỉ lệ</th><th>Xử lý</th></tr></thead>
-      <tbody>
-        <tr class="tier"><td colspan="6">● SUCCESS · Người nghe là chủ hợp đồng (Him/Herself)</td></tr>
-        <tr><td><span class="rc tag-g">CP</span></td><td>[COR] Correct</td><td>Hoàn thành xác minh</td><td class="n">1.386 <small>·47%</small></td><td><span class="mb"><span class="c-green" style="width:100%"></span></span></td><td>—</td></tr>
-        <tr><td><span class="rc tag-a">SSP</span></td><td>[INCOR] Incorrect</td><td>Sản phẩm nhận khác hợp đồng</td><td class="n">40 <small>·1,4%</small></td><td><span class="mb"><span class="c-amber" style="width:3%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-a">MDV</span></td><td>[INCOR] Incorrect</td><td>Sai mục đích vay tiền mặt</td><td class="n">55 <small>·1,9%</small></td><td><span class="mb"><span class="c-amber" style="width:4%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-a">INFOR</span></td><td>[INCOR] Incorrect</td><td>Sai thông tin cá nhân</td><td class="n">30 <small>·1,0%</small></td><td><span class="mb"><span class="c-amber" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-r">CNT</span></td><td>[FR] Fraud</td><td>Chưa nhận được khoản vay</td><td class="n">22 <small>·0,7%</small></td><td><span class="mb"><span class="c-red" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-r">KV</span></td><td>[FR] Fraud</td><td>Không có/không biết hợp đồng</td><td class="n">18 <small>·0,6%</small></td><td><span class="mb"><span class="c-red" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-r">GL</span></td><td>[FR] Fraud</td><td>Nghi ngờ gian lận</td><td class="n">15 <small>·0,5%</small></td><td><span class="mb"><span class="c-red" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-r">SAI</span> <span class="proptag">ĐỀ XUẤT</span></td><td>[FR] Fraud</td><td>NVKD tư vấn sai thông tin HĐ</td><td class="n">12 <small>·0,4%</small></td><td><span class="mb"><span class="c-red" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-b">CALLBACK</span></td><td>[CALL BACK] Call back</td><td>Hẹn gọi lại</td><td class="n">240 <small>·8,2%</small></td><td><span class="mb"><span class="c-blue" style="width:17%"></span></span></td><td><span class="rtag s2">Spin2</span></td></tr>
-        <tr><td><span class="rc tag-k">UNCOP</span></td><td>[UNCOP] Uncooperative</td><td>Im lặng/không hợp tác (chưa nêu lý do)</td><td class="n">95 <small>·3,2%</small></td><td><span class="mb"><span class="c-grey" style="width:7%"></span></span></td><td>—</td></tr>
-        <tr><td><span class="rc tag-k">NOTCP</span></td><td>[NOTCP] Not completed</td><td>Chưa hoàn tất (đã nêu lý do)</td><td class="n">130 <small>·4,4%</small></td><td><span class="mb"><span class="c-grey" style="width:9%"></span></span></td><td>—</td></tr>
-        <tr class="tier"><td colspan="6">● SUCCESS · Người khác nghe máy (Other/Him-Herself)</td></tr>
-        <tr><td><span class="rc tag-b">SIM</span></td><td>[WRONG] Wrong number</td><td>Nhầm số</td><td class="n">60 <small>·2,0%</small></td><td><span class="mb"><span class="c-violet" style="width:4%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr><td><span class="rc tag-k">LM</span></td><td>[OTHER] Other things</td><td>Người khác nghe máy giúp</td><td class="n">48 <small>·1,6%</small></td><td><span class="mb"><span class="c-teal" style="width:3%"></span></span></td><td><span class="rtag s2">Spin2</span></td></tr>
-        <tr><td><span class="rc tag-k">OTHER</span></td><td>[OTHER] Other things</td><td>Trường hợp khác (voicemail/trợ lý ảo…)</td><td class="n">25 <small>·0,9%</small></td><td><span class="mb"><span class="c-teal" style="width:2%"></span></span></td><td><span class="rtag nv">→NV</span></td></tr>
-        <tr class="tier"><td colspan="6">● NO ANSWER · Không ai nghe (Nobody) — gán ở tầng kết nối tổng đài (FR-009)</td></tr>
-        <tr><td><span class="rc tag-k">RONA</span></td><td>[RONA] Phone ringing</td><td>Đổ chuông không nghe / máy bận</td><td class="n">520 <small>·17,7%</small></td><td><span class="mb"><span class="c-grey" style="width:38%"></span></span></td><td>—</td></tr>
-        <tr><td><span class="rc tag-k">NCON</span></td><td>[NCON] Out of service</td><td>Thuê bao lỗi / không tồn tại</td><td class="n">210 <small>·7,1%</small></td><td><span class="mb"><span class="c-grey" style="width:15%"></span></span></td><td>—</td></tr>
-      </tbody>
-    </table></div>
-    <div class="up-note" style="padding:12px 16px 14px">Đủ <b>16 reason code</b> theo bộ mã <b>Code HC New</b>, nhóm 4 tầng Call Result → Person → Action → Reason. Bấm 1 dòng để drill-down danh sách cuộc gọi · xuất Excel theo bộ lọc (FR-032). <b>Xử lý:</b> <span class="rtag nv">→NV</span> chuyển nhân viên ngày kế tiếp · <span class="rtag s2">Spin2</span> có gọi lại. <b>SAI</b> hiện <span class="proptag">ĐỀ XUẤT</span> (chưa có nhánh trong kịch bản gốc).</div>
-  </div>
-
-  <div class="grid two" style="margin-top:16px">
-    <!-- Trạng thái cuộc gọi chi tiết -->
-    <div>
-      <h2 class="sec" style="margin-top:0"><span class="frtag">NÂNG CẤP · FR-030 (v) · FR-009</span> Theo trạng thái cuộc gọi</h2>
-      <div class="card">
-        <div class="sdonut">
-          <div class="ring" style="background:conic-gradient(var(--green) 0 74%, var(--grey) 74% 91.7%, var(--red) 91.7% 98.8%, var(--amber) 98.8% 100%)">
-            <div class="hole"><div><b>2.940</b><br><small>cuộc gọi</small></div></div>
-          </div>
-          <div class="legend">
-            <div class="li"><span class="dot c-green"></span> Trả lời (kết nối)<span class="v">2.176</span><span class="p">74%</span></div>
-            <div class="li"><span class="dot c-grey"></span> Đổ chuông không nghe <b style="color:#41506A">RONA</b><span class="v">520</span><span class="p">18%</span></div>
-            <div class="li"><span class="dot c-red"></span> Thuê bao lỗi/không tồn tại <b style="color:#41506A">NCON</b><span class="v">210</span><span class="p">7%</span></div>
-            <div class="li"><span class="dot c-amber"></span> Voicemail / từ chối QC <b style="color:#41506A">OTHER</b><span class="v">34</span><span class="p">1%</span></div>
-          </div>
-        </div>
-        <div class="up-note">Phân biệt trạng thái theo bộ mã OMICall (map mã nhà mạng — FR-009), không gom chung "Not Connected".</div>
-      </div>
-    </div>
-
-    <!-- Theo nhóm sản phẩm -->
-    <div>
-      <h2 class="sec" style="margin-top:0"><span class="frtag">NÂNG CẤP</span> Theo nhóm sản phẩm</h2>
-      <div class="card prod">
-        <div class="prodbar"><span class="lb">Vay tiền mặt</span><span class="track"><span class="seg c-green" style="width:52%">COR 900</span><span class="seg c-amber" style="width:28%">480</span><span class="seg c-red" style="width:20%">FR 40</span></span></div>
-        <div class="prodbar"><span class="lb">Trả góp (CDL/TW)</span><span class="track"><span class="seg c-green" style="width:58%">COR 420</span><span class="seg c-amber" style="width:30%">220</span><span class="seg c-red" style="width:12%">18</span></span></div>
-        <div class="prodbar"><span class="lb">Dịch vụ (SPL)</span><span class="track"><span class="seg c-green" style="width:46%">COR 190</span><span class="seg c-amber" style="width:38%">160</span><span class="seg c-red" style="width:16%">9</span></span></div>
-        <div style="display:flex;gap:16px;font-size:11.5px;color:var(--sub);margin-top:4px"><span>🟢 Hoàn thành</span><span>🟡 Cần follow-up</span><span>🔴 Gian lận/sai</span></div>
-        <div class="up-note">Cho phép ban quản trị so sánh chất lượng giải ngân theo dòng sản phẩm — dữ liệu quản trị doanh nghiệp còn thiếu ở bản hiện tại.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== UPGRADE: Pending chi tiết ===== -->
-  <h2 class="sec"><span class="frtag">NÂNG CẤP · FR-033</span> Pending chi tiết</h2>
-  <div class="card">
-    <div class="pendrow">
-      <div class="pb"><div class="n" style="color:var(--amber)">260</div><div class="l">Tổng đang pending</div></div>
-      <div class="pb"><div class="n">180</div><div class="l">Pending &lt; 4 giờ</div></div>
-      <div class="pb"><div class="n">62</div><div class="l">Pending 4–8 giờ</div></div>
-      <div class="pb"><div class="n" style="color:var(--red)">18</div><div class="l">Pending &gt; 8 giờ ⚠</div></div>
-    </div>
-    <div class="up-note">Thể hiện số lượng &amp; thời gian pending theo mốc — cảnh báo hợp đồng sắp trễ TAT 3 ngày.</div>
-  </div>
-
-  <!-- ===== UPGRADE: Bảng theo hợp đồng / SĐT ===== -->
-  <h2 class="sec"><span class="frtag">NÂNG CẤP · FR-030 (iv) · FR-031</span> Lịch sử theo Hợp đồng / SĐT · Số lần gọi</h2>
-  <div class="card" style="padding:0">
+  <!-- ============ DASHBOARD 1: CDR ============ -->
+  <div class="pane on" id="cdr">
     <div class="tscroll">
-    <table>
-      <thead><tr><th>#</th><th>Mã hợp đồng</th><th>SĐT KH</th><th>Nhóm SP</th><th>Số lần gọi</th><th>Kết quả cuối (Action/Reason)</th><th>Trạng thái</th><th>Ghi chú bóc tách</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>MAFC-CDL-889201</td><td>0902 252 196</td><td>Trả góp</td><td class="callcount">1</td><td><span class="code tag-g">COR</span> / CP</td><td><span class="pill-s tag-g">Hoàn thành</span></td><td>—</td></tr>
-        <tr><td>2</td><td>MAFC-CASH-771043</td><td>0902 252 232</td><td>Tiền mặt</td><td class="callcount">2</td><td><span class="code tag-a">CALLBACK</span> / CALLBACK</td><td><span class="pill-s tag-a">Hẹn 15:00 04/08</span></td><td>Thời gian hẹn: 15:00 04/08</td></tr>
-        <tr><td>3</td><td>MAFC-CASH-771088</td><td>0902 252 264</td><td>Tiền mặt</td><td class="callcount">1</td><td><span class="code tag-r">FR</span> / GL</td><td><span class="pill-s tag-r">Nghi gian lận</span></td><td>Số tiền thực nhận: 18.000.000</td></tr>
-        <tr><td>4</td><td>MAFC-SPL-330512</td><td>0902 252 211</td><td>Dịch vụ</td><td class="callcount">3</td><td><span class="code tag-k">RONA</span> / RONA</td><td><span class="pill-s tag-k">Đổ chuông ko nghe</span></td><td>—</td></tr>
-        <tr><td>5</td><td>MAFC-CDL-889450</td><td>0902 252 198</td><td>Trả góp</td><td class="callcount">1</td><td><span class="code tag-a">INCOR</span> / SSP</td><td><span class="pill-s tag-a">SP khác HĐ</span></td><td>SP thực nhận: điện thoại</td></tr>
-        <tr><td>6</td><td>MAFC-CASH-772010</td><td>0902 252 245</td><td>Tiền mặt</td><td class="callcount">2</td><td><span class="code tag-b">WRONG</span> / SIM</td><td><span class="pill-s tag-b">Nhầm số</span></td><td>—</td></tr>
-      </tbody>
-    </table>
+      <table>
+        <thead>
+          <tr>
+            <th class="stick">ID cuộc gọi</th>
+            <th>Mã hợp đồng</th><th>SĐT</th><th>Đầu số gọi ra</th><th>Mã chiến dịch</th><th>CLI</th>
+            <th>Trạng thái</th><th>SIP</th><th>Bắt đầu</th><th>Bắt máy</th><th>Kết thúc</th><th>T.lượng gọi</th><th>T.lượng đàm thoại</th>
+            <th>Call Result</th><th>Person</th><th>Action</th><th>Reason</th>
+            <th>Số tiền bóc tách</th><th>Mục đích/SP bóc tách</th><th>Hẹn gọi lại</th>
+            <th>Transcript</th><th>Recording</th><th>Số lần gọi</th><th>Spin</th><th>Human T+1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="stick"><b>CALL-000201</b></td>
+            <td>MAFC-CDL-889201</td><td>0902 252 196</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-g">Trả lời</span></td><td>200</td><td>09:42:01</td><td>09:42:09</td><td>09:44:38</td><td>157s</td><td>149s</td>
+            <td>Success</td><td>Him/Herself</td><td><span class="code c-g">[COR]</span></td><td><span class="code c-g">CP</span></td>
+            <td class="dim">—</td><td class="dim">—</td><td class="dim">—</td>
+            <td><span class="link">Xem</span></td><td><span class="play"><span class="b">▶</span>00:00–02:37</span></td><td class="num">1</td><td><span class="badge b-s1">Spin1</span></td><td class="dim">—</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>CALL-000202</b></td>
+            <td>MAFC-CASH-771088</td><td>0902 252 264</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-g">Trả lời</span></td><td>200</td><td>09:42:05</td><td>09:42:12</td><td>09:44:02</td><td>117s</td><td>110s</td>
+            <td>Success</td><td>Him/Herself</td><td><span class="code c-r">[FR]</span></td><td><span class="code c-r">GL</span></td>
+            <td class="num">18.000.000</td><td class="dim">—</td><td class="dim">—</td>
+            <td><span class="link">Xem</span></td><td><span class="play"><span class="b">▶</span>00:00–01:50</span></td><td class="num">1</td><td><span class="badge b-s1">Spin1</span></td><td><span class="badge b-nv">Có →NV</span></td>
+          </tr>
+          <tr>
+            <td class="stick"><b>CALL-000203</b></td>
+            <td>MAFC-CASH-771043</td><td>0902 252 232</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-g">Trả lời</span></td><td>200</td><td>09:43:00</td><td>09:43:08</td><td>09:43:52</td><td>52s</td><td>44s</td>
+            <td>Success</td><td>Him/Herself</td><td><span class="code c-b">[CALL BACK]</span></td><td><span class="code c-b">CALLBACK</span></td>
+            <td class="dim">—</td><td class="dim">—</td><td>15:00 04/08</td>
+            <td><span class="link">Xem</span></td><td><span class="play"><span class="b">▶</span>00:00–00:52</span></td><td class="num">2</td><td><span class="badge b-s2">Spin2</span></td><td class="dim">—</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>CALL-000204</b></td>
+            <td>MAFC-SPL-330512</td><td>0902 252 211</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-k">Đổ chuông ko nghe</span></td><td>480</td><td>09:43:10</td><td class="dim">—</td><td>09:43:40</td><td>30s</td><td class="dim">0s</td>
+            <td>No Answer</td><td>Nobody</td><td><span class="code c-k">[RONA]</span></td><td><span class="code c-k">RONA</span></td>
+            <td class="dim">—</td><td class="dim">—</td><td class="dim">—</td>
+            <td class="dim">—</td><td class="dim">—</td><td class="num">3</td><td><span class="badge b-s1">Spin1</span></td><td class="dim">—</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>CALL-000205</b></td>
+            <td>MAFC-CDL-889450</td><td>0902 252 245</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-b">Người khác nghe</span></td><td>200</td><td>09:43:20</td><td>09:43:27</td><td>09:44:10</td><td>50s</td><td>43s</td>
+            <td>Success</td><td>Other</td><td><span class="code c-v">[WRONG]</span></td><td><span class="code c-v">SIM</span></td>
+            <td class="dim">—</td><td class="dim">—</td><td class="dim">—</td>
+            <td><span class="link">Xem</span></td><td><span class="play"><span class="b">▶</span>00:00–00:50</span></td><td class="num">2</td><td><span class="badge b-s1">Spin1</span></td><td><span class="badge b-nv">Có →NV</span></td>
+          </tr>
+          <tr>
+            <td class="stick"><b>CALL-000206</b></td>
+            <td>MAFC-CDL-889777</td><td>0902 252 198</td><td>100091110</td><td>HC_MAFC_0308</td><td>02873 001234</td>
+            <td><span class="st c-a">SP khác HĐ</span></td><td>200</td><td>09:43:30</td><td>09:43:37</td><td>09:45:20</td><td>110s</td><td>103s</td>
+            <td>Success</td><td>Him/Herself</td><td><span class="code c-a">[INCOR]</span></td><td><span class="code c-a">SSP</span></td>
+            <td class="dim">—</td><td>Điện thoại (nhận khác HĐ)</td><td class="dim">—</td>
+            <td><span class="link">Xem</span></td><td><span class="play"><span class="b">▶</span>00:00–01:43</span></td><td class="num">1</td><td><span class="badge b-s1">Spin1</span></td><td><span class="badge b-nv">Có →NV</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">Mỗi dòng = 1 <b>cuộc gọi</b> (call-level). Cột <b>Human T+1</b> = cờ chuyển case về nhân viên ngày kế tiếp (theo escalation của bộ mã). <b>CLI</b> = số hiển thị cho KH · <b>Đầu số gọi ra</b> = số thực/SIP đi ra. Bảng cuộn ngang; xuất Excel đủ 25 trường.</div>
+  </div>
+
+  <!-- ============ DASHBOARD 2: THEO KHÁCH HÀNG ============ -->
+  <div class="pane" id="kh">
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="stick">Họ tên</th>
+            <th>Mã KH</th><th>SĐT</th><th>Số lần gọi</th>
+            <th>Last action code</th><th>Best action code</th>
+            <th>Ngày sinh</th><th>Giới tính</th><th>Loại sản phẩm</th><th>Tên SP/Dịch vụ</th><th>Ngày giải ngân</th><th>Số tiền giải ngân</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="stick"><b>Nguyễn Văn An</b></td>
+            <td>MAFC-KH-0001</td><td>0902 252 196</td><td class="num">1</td>
+            <td><span class="code c-g">[COR]</span> <span class="code c-g">CP</span></td>
+            <td><span class="code c-g">[COR]</span> <span class="code c-g">CP</span></td>
+            <td>12/05/1990</td><td>Nam</td><td>Vay tiền mặt</td><td class="dim">—</td><td>26/05/2026</td><td class="num">30.000.000</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>Trần Thị Bình</b></td>
+            <td>MAFC-KH-0002</td><td>0902 252 232</td><td class="num">2</td>
+            <td><span class="code c-b">[CALL BACK]</span> <span class="code c-b">CALLBACK</span></td>
+            <td><span class="code c-g">[COR]</span> <span class="code c-g">CP</span> <span class="lvl">best</span></td>
+            <td>03/09/1988</td><td>Nữ</td><td>Trả góp (CDL/TW)</td><td>Điện thoại Galaxy A</td><td>24/05/2026</td><td class="num">12.500.000</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>Lê Hoàng Cường</b></td>
+            <td>MAFC-KH-0003</td><td>0902 252 264</td><td class="num">1</td>
+            <td><span class="code c-r">[FR]</span> <span class="code c-r">GL</span></td>
+            <td><span class="code c-r">[FR]</span> <span class="code c-r">GL</span></td>
+            <td>21/11/1995</td><td>Nam</td><td>Vay tiền mặt</td><td class="dim">—</td><td>26/05/2026</td><td class="num">25.000.000</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>Phạm Thị Dung</b></td>
+            <td>MAFC-KH-0004</td><td>0902 252 211</td><td class="num">3</td>
+            <td><span class="code c-k">[RONA]</span> <span class="code c-k">RONA</span></td>
+            <td><span class="code c-k">[RONA]</span> <span class="code c-k">RONA</span></td>
+            <td>17/02/1992</td><td>Nữ</td><td>Dịch vụ (SPL)</td><td>Khóa học tiếng Anh</td><td>25/05/2026</td><td class="num">8.000.000</td>
+          </tr>
+          <tr>
+            <td class="stick"><b>Võ Minh Đức</b></td>
+            <td>MAFC-KH-0005</td><td>0902 252 245</td><td class="num">2</td>
+            <td><span class="code c-a">[INCOR]</span> <span class="code c-a">SSP</span></td>
+            <td><span class="code c-a">[INCOR]</span> <span class="code c-a">SSP</span></td>
+            <td>08/07/1985</td><td>Nam</td><td>Trả góp (CDL/TW)</td><td>Laptop Dell</td><td>24/05/2026</td><td class="num">18.900.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      Mỗi dòng = 1 <b>khách hàng</b> (gộp mọi cuộc gọi). Hai cột trạng thái lấy <b>cả Action + Reason Code</b> từ <b>bộ trạng thái khách hàng 2 cấp</b> (module Khách hàng — đối tác khai báo sẵn ở OMI):
+      <br>• <b>Last action code</b> = trạng thái cuộc gọi <b>kết thúc trong flow</b>; nhiều cuộc → lấy trạng thái <b>"xa" nhất theo thứ tự khai báo</b> trong bộ trạng thái.
+      <br>• <b>Best action code</b> = trạng thái được đánh dấu <span class="lvl">best</span>; nếu không có "best" → lấy theo Last action code. (VD: Trần Thị Bình — Last = CALLBACK, Best = COR/CP.)
     </div>
   </div>
-  <div class="up-note" style="margin-left:2px">Gộp lịch sử theo <b>Mã hợp đồng</b> (không chỉ SĐT), hiển thị <b>số lần gọi</b> (FR-031) &amp; dữ liệu bóc tách (số tiền/mục đích/thời gian hẹn). Xuất Excel toàn bảng (FR-032).</div>
 
+  <!-- ============ DASHBOARD 3: BÁO CÁO CALLBOT (NLU) ============ -->
+  <div class="pane" id="nlu">
+    <div class="kpis">
+      <div class="kpi g"><div class="kl">Độ chính xác Speech-to-Text</div><div class="kv">93<small>%</small></div><div class="kd ok">WER 7% · đạt (≥ 90%)</div></div>
+      <div class="kpi b"><div class="kl">Tương thích Ý định (Intent)</div><div class="kv">88<small>%</small></div><div class="kd ok">đạt (≥ 85%)</div></div>
+      <div class="kpi v"><div class="kl">Bóc tách Thực thể (Entity)</div><div class="kv">82<small>%</small></div><div class="kd ok">đạt (≥ 80%)</div></div>
+      <div class="kpi t"><div class="kl">Tốc độ phản hồi bot (TB)</div><div class="kv">2,1<small>giây</small></div><div class="kd ok">đạt (≤ 3s)</div></div>
+    </div>
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="stick">#</th><th>Ngày tạo</th><th>Usersay (Speech-to-Text)</th><th>Recording</th>
+            <th>Intent nhận diện</th><th>Entity bóc tách</th>
+            <th>Tương thích Intent</th><th>Tương thích Entity</th><th>WER</th><th>Tốc độ phản hồi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="stick">1</td><td>09:54 26/05</td><td>"6 tây anh gửi cho nha"</td><td><span class="play"><span class="b">▶</span>00:41–00:44</span></td>
+            <td><span class="code c-b">ai_intent_promise</span> · Câu đưa lời hẹn</td><td><span class="code c-t">ai_entity_datetime</span> <span class="code c-t">ai_entity_number</span></td>
+            <td><span class="pct ok">94%</span><span class="bar c-g" style="width:47px"></span></td><td><span class="pct ok">90%</span><span class="bar c-a" style="width:45px"></span></td><td class="pct">4%</td><td class="pct ok">1,8s</td></tr>
+          <tr><td class="stick">2</td><td>09:54 26/05</td><td>"giờ anh chưa có lương em ơi"</td><td><span class="play"><span class="b">▶</span>00:54–00:58</span></td>
+            <td><span class="code c-b">ai_intent_promise</span></td><td><span class="code c-k">funds_pending</span></td>
+            <td><span class="pct ok">89%</span><span class="bar c-g" style="width:44px"></span></td><td><span class="pct warn">78%</span><span class="bar c-a" style="width:39px"></span></td><td class="pct">6%</td><td class="pct ok">2,0s</td></tr>
+          <tr><td class="stick">3</td><td>09:54 26/05</td><td>"là anh sẽ làm dịch vụ trung tâm"</td><td><span class="play"><span class="b">▶</span>00:50–00:53</span></td>
+            <td><span class="code c-b">ai_intent_disagree_service</span> · Từ chối dịch vụ</td><td class="dim">—</td>
+            <td><span class="pct ok">91%</span><span class="bar c-g" style="width:45px"></span></td><td class="dim">—</td><td class="pct">5%</td><td class="pct ok">2,3s</td></tr>
+          <tr><td class="stick">4</td><td>09:54 26/05</td><td>"ờ đúng rồi em a lô ạ"</td><td><span class="play"><span class="b">▶</span>00:05–00:13</span></td>
+            <td><span class="code c-b">ai_intent_confirm</span> · Câu xác nhận đúng</td><td class="dim">—</td>
+            <td><span class="pct ok">96%</span><span class="bar c-g" style="width:48px"></span></td><td class="dim">—</td><td class="pct">3%</td><td class="pct ok">1,6s</td></tr>
+          <tr><td class="stick">5</td><td>09:54 26/05</td><td>"bên anh đang sử dụng 1 cái nền tảng"</td><td><span class="play"><span class="b">▶</span>00:42–00:45</span></td>
+            <td class="dim">— (ngoài kịch bản)</td><td><span class="code c-t">ai_entity_number</span></td>
+            <td><span class="pct warn">62%</span><span class="bar c-a" style="width:31px"></span></td><td><span class="pct ok">84%</span><span class="bar c-a" style="width:42px"></span></td><td class="pct warn">12%</td><td class="pct ok">2,4s</td></tr>
+          <tr><td class="stick">6</td><td>09:54 26/05</td><td>"ờ nếu mà nói sâu á thì chắc em"</td><td><span class="play"><span class="b">▶</span>00:38–00:45</span></td>
+            <td><span class="code c-b">ai_intent_good_rating</span> · Câu đánh giá tốt</td><td class="dim">—</td>
+            <td><span class="pct ok">87%</span><span class="bar c-g" style="width:43px"></span></td><td class="dim">—</td><td class="pct">7%</td><td class="pct ok">1,9s</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">Mỗi dòng = 1 <b>câu nói của khách</b> (usersay). Đo <b>độ tương thích</b> của từng câu với intent/entity hệ thống, <b>WER</b> (tỷ lệ % sai Speech-to-Text) và <b>tốc độ phản hồi</b> của bot (mục tiêu ≤ 3s). Ô đỏ/vàng = dưới ngưỡng NFR, phục vụ QC &amp; tuning. Tương ứng NFR-001..004.</div>
+  </div>
 </div>
+
+<script>
+  document.querySelectorAll('.subtabs .pill[data-tab]').forEach(p=>{
+    p.addEventListener('click',()=>{
+      document.querySelectorAll('.subtabs .pill').forEach(x=>x.classList.remove('on'));
+      p.classList.add('on');
+      const t=p.dataset.tab;
+      document.querySelectorAll('.pane').forEach(pn=>pn.classList.toggle('on',pn.id===t));
+      const map={cdr:'102 cuộc gọi',kh:'87 khách hàng',nlu:'182 câu nói'};
+      document.getElementById('cnt').textContent=map[t];
+    });
+  });
+</script>
 
 </body>
 </html>
