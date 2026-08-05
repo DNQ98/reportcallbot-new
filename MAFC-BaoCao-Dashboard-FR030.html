@@ -253,7 +253,6 @@
     <div class="mon-sec">
       <div class="mon-h">Giám sát khách hàng</div>
       <div class="khctl">
-        <div class="seg-toggle"><button class="on" id="vKH">Theo khách hàng</button><button id="vCall">Theo cuộc gọi</button></div>
         <div class="reach">
           <div class="rbar"><span id="rfill" class="rfill"></span></div>
           <div class="rtx">Đã gọi <b id="rCalled">87</b>/<b id="rTotal">100</b> khách hàng trong danh sách · <span id="rLeft">13 chưa gọi</span></div>
@@ -263,7 +262,7 @@
         <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl">Action Code (cấp 1) · <span style="color:var(--blue)">bấm để xem Reason</span></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
         <div style="text-align:center"><div id="donutReason"></div><div class="donut-lbl" id="reasonTitle">Reason Code của <b>PTP</b></div><div class="chart-legend" id="legReason" style="justify-content:center"></div></div>
       </div>
-      <div class="note" style="margin-top:14px">Theo <b>bộ trạng thái khách hàng</b> 2 cấp. <b>Chọn 1 Action Code</b> (cấp 1) ở donut trái → donut phải hiện <b>chi tiết Reason Code</b> (cấp 2) của nhóm đó. Toggle <b>Theo khách hàng / Theo cuộc gọi</b> đổi cách gom (mỗi KH tính 1 lần theo trạng thái vs đếm theo từng cuộc gọi). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
+      <div class="note" style="margin-top:14px">Theo <b>bộ trạng thái khách hàng</b> 2 cấp. <b>Chọn 1 Action Code</b> (cấp 1) ở donut trái → donut phải hiện <b>chi tiết Reason Code</b> (cấp 2) của nhóm đó. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
     </div>
     <div class="tscroll">
       <table>
@@ -503,8 +502,6 @@
   }
   document.getElementById('donutAction').addEventListener('click',e=>{const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
   document.getElementById('legAction').addEventListener('click',e=>{const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
-  document.getElementById('vKH').addEventListener('click',function(){this.classList.add('on');document.getElementById('vCall').classList.remove('on');khView='kh';renderKH();});
-  document.getElementById('vCall').addEventListener('click',function(){this.classList.add('on');document.getElementById('vKH').classList.remove('on');khView='call';renderKH();});
   document.getElementById('rfill').style.width=Math.round(87/100*100)+'%';
   renderKH();
 
