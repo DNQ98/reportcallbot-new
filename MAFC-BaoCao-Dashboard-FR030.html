@@ -101,6 +101,9 @@
   .chart-legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);}
   .chart-legend .dot{width:11px;height:11px;border-radius:3px;flex:none;}
   .donut-lbl{text-align:center;font-size:13px;color:var(--sub);margin-top:8px;}
+  .fx{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#E7F0FC;color:#2F80ED;font-size:9.5px;font-weight:700;cursor:help;margin-left:5px;vertical-align:middle;border:1px solid #BFD9F7;}
+  .fxtip{position:fixed;z-index:300;max-width:340px;background:#0F1620;color:#EAF0F5;border-radius:10px;padding:10px 13px;font-size:11.5px;line-height:1.55;box-shadow:0 10px 28px rgba(0,0,0,.4);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s;}
+  .fxtip.show{opacity:1;transform:none;}
   .khctl{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
   .reach{flex:1;min-width:280px;}
   .reach .rbar{height:8px;background:#EAEEF3;border-radius:5px;overflow:hidden;}
@@ -156,8 +159,8 @@
     <div class="mon-sec">
       <div class="mon-h">Giám sát realtime</div>
       <div class="mon-rt">
-        <div class="gauge-wrap"><div id="ccuGauge"></div><div class="gauge-lbl">Cuộc gọi đồng thời</div></div>
-        <div id="areaChart"></div>
+        <div class="gauge-wrap"><div id="ccuGauge"></div><div class="gauge-lbl">Cuộc gọi đồng thời <span class="fx" data-fx="Gauge CCU: value = số cuộc đang active (gồm cả đang đổ chuông); % = CCU hiện tại ÷ CCU tối đa (cấu hình). Cập nhật realtime qua API.">ⓘ</span></div></div>
+        <div><div id="areaChart"></div><div class="donut-lbl">Trạng thái cuộc gọi theo thời gian <span class="fx" data-fx="Vùng chồng: V(s,b) = số cuộc gọi có trạng thái s và KẾT THÚC trong bucket [b, b+5′). Bucket 5′, cửa sổ 60′ cố định; xếp chồng theo legend.">ⓘ</span></div></div>
       </div>
       <div class="chart-legend" id="legend1"></div>
     </div>
@@ -165,9 +168,9 @@
       <div class="mon-h">Giám sát cuộc gọi</div>
       <div class="seg-toggle"><button class="on" id="segQty">Theo số lượng</button><button id="segPct">Theo tỷ lệ</button></div>
       <div class="mon-cg">
-        <div id="barChart"></div>
-        <div><div id="donut1"></div><div class="donut-lbl">Tổng số cuộc gọi</div></div>
-        <div><div id="donut2"></div><div class="donut-lbl">Thời lượng nghe máy</div></div>
+        <div><div id="barChart"></div><div class="donut-lbl">Cuộc gọi theo mốc 30′ <span class="fx" data-fx="Cột chồng theo mốc 30′. Theo số lượng: Bar(s,b) = số cuộc trạng thái s kết thúc trong [b, b+30′). Theo tỷ lệ: Bar(s,b) ÷ tổng cột × 100.">ⓘ</span></div></div>
+        <div><div id="donut1"></div><div class="donut-lbl">Tổng số cuộc gọi <span class="fx" data-fx="Donut Tổng số cuộc gọi: Seg(s) = số cuộc gọi có trạng thái s; tâm = tổng số cuộc gọi.">ⓘ</span></div></div>
+        <div><div id="donut2"></div><div class="donut-lbl">Thời lượng nghe máy <span class="fx" data-fx="Donut Thời lượng nghe máy (đề xuất): Seg(s) = tổng thời lượng đàm thoại của các cuộc có trạng thái s.">ⓘ</span></div></div>
       </div>
       <div class="chart-legend" id="legend2"></div>
     </div>
@@ -234,14 +237,14 @@
       </div>
       <div class="tat-grid">
         <div class="tat-card">
-          <div class="tat-t">Connect TAT (&lt; <span class="tatn">3</span> ngày)</div>
+          <div class="tat-t">Connect TAT (&lt; <span class="tatn">3</span> ngày) <span class="fx" data-fx="Connect TAT = số HĐ có (thời điểm kết nối được KH − thời điểm import) < n ngày ÷ tổng HĐ × 100.">ⓘ</span></div>
           <div class="tat-desc">Từ khi import đến khi <b>kết nối được với KH</b></div>
           <div class="tat-pct" id="cPct">—</div>
           <div class="tbar"><span class="tfill" id="cFill"></span></div>
           <div class="tat-sub"><span class="okc">Pass <b id="cPass">—</b></span> · <span class="failc">Fail <b id="cFail">—</b></span> / <b id="cTot">—</b> hợp đồng</div>
         </div>
         <div class="tat-card">
-          <div class="tat-t">First call TAT (&lt; <span class="tatn">3</span> ngày)</div>
+          <div class="tat-t">First call TAT (&lt; <span class="tatn">3</span> ngày) <span class="fx" data-fx="First call TAT = số HĐ có (thời điểm cuộc gọi đầu tiên − thời điểm import) < n ngày ÷ tổng HĐ × 100.">ⓘ</span></div>
           <div class="tat-desc">Từ ngày import đến <b>cuộc gọi đầu tiên</b></div>
           <div class="tat-pct" id="fPct">—</div>
           <div class="tbar"><span class="tfill" id="fFill"></span></div>
@@ -255,11 +258,11 @@
       <div class="khctl">
         <div class="reach">
           <div class="rbar"><span id="rfill" class="rfill"></span></div>
-          <div class="rtx">Đã gọi <b id="rCalled">87</b>/<b id="rTotal">100</b> khách hàng trong danh sách · <span id="rLeft">13 chưa gọi</span></div>
+          <div class="rtx">Đã gọi <b id="rCalled">87</b>/<b id="rTotal">100</b> khách hàng trong danh sách · <span id="rLeft">13 chưa gọi</span> <span class="fx" data-fx="Tiếp cận = số KH có ≥1 cuộc gọi ÷ tổng danh sách import × 100.">ⓘ</span></div>
         </div>
       </div>
       <div class="mon-cg" style="grid-template-columns:1fr 1fr;max-width:860px;margin:14px auto 0;">
-        <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl">Action Code (cấp 1) · <span style="color:var(--blue)">bấm để xem Reason</span></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
+        <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl">Action Code (cấp 1) · <span style="color:var(--blue)">bấm để xem Reason</span> <span class="fx" data-fx="Donut Action Code (cấp 1): Seg(a) = số KH có action đại diện = a; tâm = tổng KH đã phân loại.">ⓘ</span></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
         <div style="text-align:center"><div id="donutReason"></div><div class="donut-lbl" id="reasonTitle">Reason Code của <b>PTP</b></div><div class="chart-legend" id="legReason" style="justify-content:center"></div></div>
       </div>
       <div class="note" style="margin-top:14px">Theo <b>bộ trạng thái khách hàng</b> 2 cấp. <b>Chọn 1 Action Code</b> (cấp 1) ở donut trái → donut phải hiện <b>chi tiết Reason Code</b> (cấp 2) của nhóm đó. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
@@ -497,7 +500,7 @@
     document.getElementById('legAction').innerHTML=acts.map(a=>`<span class="li" style="cursor:pointer;${a.code===selAction?'font-weight:700;color:var(--ink)':''}" data-code="${a.code}"><span class="dot" style="background:${a.color}"></span>${a.code}</span>`).join('');
     const act=acts.find(a=>a.code===selAction)||acts[0];
     document.getElementById('donutReason').innerHTML=donut(act.reasons.map(r=>({v:r.v,c:r.color,name:r.code})),fmt(act.v));
-    document.getElementById('reasonTitle').innerHTML='Reason Code của <b>'+act.code+'</b>';
+    document.getElementById('reasonTitle').innerHTML='Reason Code của <b>'+act.code+'</b> <span class="fx" data-fx="Donut Reason Code (cấp 2) của Action đang chọn: Seg(r) = số KH có action=A và reason=r; hiển thị Top 5 + gộp Khác.">ⓘ</span>';
     document.getElementById('legReason').innerHTML=act.reasons.map(r=>`<span class="li"><span class="dot" style="background:${r.color}"></span>${r.code}</span>`).join('');
   }
   document.getElementById('donutAction').addEventListener('click',e=>{const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
@@ -523,6 +526,12 @@
   }
   document.getElementById('tatN').addEventListener('input',renderTAT);
   renderTAT();
+
+  // ---- Tooltip công thức khi hover icon ⓘ (data-fx) ----
+  const fxtip=document.createElement('div');fxtip.className='fxtip';document.body.appendChild(fxtip);
+  document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-fx]');if(!el)return;fxtip.textContent=el.getAttribute('data-fx');fxtip.classList.add('show');});
+  document.addEventListener('mousemove',e=>{if(!fxtip.classList.contains('show'))return;let x=e.clientX+14,y=e.clientY+16,w=fxtip.offsetWidth,h=fxtip.offsetHeight;if(x+w>window.innerWidth)x=e.clientX-w-14;if(y+h>window.innerHeight)y=e.clientY-h-16;fxtip.style.left=x+'px';fxtip.style.top=Math.max(56,y)+'px';});
+  document.addEventListener('mouseout',e=>{if(e.target.closest('[data-fx]'))fxtip.classList.remove('show');});
 </script>
 
 </body>
