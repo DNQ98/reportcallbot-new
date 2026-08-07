@@ -76,6 +76,12 @@
   .exe::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;}
   .exe.done{background:var(--green-soft);color:var(--green);}
   .exe.undone{background:var(--red-soft);color:var(--red);}
+  .dim-pills{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 2px;}
+  .dim-pill{font-size:12px;font-weight:600;padding:6px 13px;border-radius:20px;border:1px solid var(--line2);background:#fff;color:var(--sub);cursor:pointer;display:inline-flex;align-items:center;gap:7px;user-select:none;}
+  .dim-pill .lv{font-size:9px;font-weight:800;font-family:var(--mono);padding:1px 5px;border-radius:4px;background:var(--grey-soft);color:var(--sub);}
+  .dim-pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .dim-pill.on .lv{background:rgba(255,255,255,.22);color:#fff;}
+  .dim-empty{display:flex;align-items:center;justify-content:center;min-height:180px;font-size:12.5px;color:#9AA6B2;font-style:italic;text-align:center;padding:0 16px;}
   .pct{font-family:var(--mono);font-weight:700;}
   .bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-left:6px;}
 
@@ -320,11 +326,13 @@
           <div class="rtx">Đã gọi <b id="rCalled">87</b>/<b id="rTotal">100</b> khách hàng trong danh sách · <span id="rLeft">13 chưa gọi</span> <span class="fx" data-fx="Tiếp cận = số KH có ≥1 cuộc gọi ÷ tổng danh sách import × 100.">ⓘ</span></div>
         </div>
       </div>
+      <div class="dim-lbl" style="font-size:12px;color:var(--sub);margin-top:14px">Chọn <b>bộ trạng thái</b> để phân tích (KH có thể có nhiều bộ · mỗi cuộc gọi cập nhật 1 bộ):</div>
+      <div class="dim-pills" id="dimPills"></div>
       <div class="mon-cg" style="grid-template-columns:1fr 1fr;max-width:860px;margin:14px auto 0;">
-        <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl">Action Code (cấp 1) · <span style="color:var(--blue)">bấm để xem Reason</span> <span class="fx" data-fx="Donut Action Code (cấp 1): Seg(a) = số KH có action đại diện = a; tâm = tổng KH đã phân loại.">ⓘ</span></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
-        <div style="text-align:center"><div id="donutReason"></div><div class="donut-lbl" id="reasonTitle">Reason Code của <b>PTP</b></div><div class="chart-legend" id="legReason" style="justify-content:center"></div></div>
+        <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl" id="actTitle"></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
+        <div style="text-align:center"><div id="donutReason"></div><div class="donut-lbl" id="reasonTitle"></div><div class="chart-legend" id="legReason" style="justify-content:center"></div></div>
       </div>
-      <div class="note" style="margin-top:14px">Theo <b>bộ trạng thái khách hàng</b> 2 cấp. <b>Chọn 1 Action Code</b> (cấp 1) ở donut trái → donut phải hiện <b>chi tiết Reason Code</b> (cấp 2) của nhóm đó. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
+      <div class="note" style="margin-top:14px">Một KH có thể mang <b>nhiều bộ trạng thái</b> (ACTION CODE, CONTACT STATUS, ZALO FRIEND, ZALO MESSAGE…); <b>mỗi cuộc gọi chỉ cập nhật 1 bộ</b>. Chọn bộ ở trên để xem phân bố: bộ <b>2 cấp</b> → bấm 1 mã cấp 1 ở donut trái để xem chi tiết cấp 2 bên phải; bộ <b>1 cấp</b> → chỉ có donut trái. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái hiện tại của bộ đó). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
     </div>
     <div class="tscroll">
       <table>
@@ -536,36 +544,67 @@
   document.getElementById('segPct').addEventListener('click',function(){this.classList.add('on');document.getElementById('segQty').classList.remove('on');renderBar(true);});
 
   // ---- Giám sát khách hàng: donut theo Action Code & Reason Code (bộ mã MAFC) ----
-  // ---- Giám sát khách hàng: view toggle + drill-down Action -> Reason ----
-  const KHTREE={
-    kh:{called:87,total:100,actions:[
+  // ---- Giám sát khách hàng: nhiều BỘ TRẠNG THÁI (dimension) · mỗi bộ 1 hoặc 2 cấp ----
+  const DIMS=[
+    {key:'action', name:'ACTION CODE', level:2, actions:[
       {code:'INIT',color:'#1E2A3A',v:12,reasons:[{code:'INIT',color:'#1E2A3A',v:12}]},
       {code:'PTP',color:'#2F80ED',v:38,reasons:[{code:'PTP_TODAY',color:'#2F80ED',v:20},{code:'PTP_DATE_TO_PAY',color:'#5296F2',v:14},{code:'PTP_NOT_DAY',color:'#8FBEF8',v:4}]},
       {code:'RTP',color:'#3AAFC9',v:27,reasons:[{code:'RTP_NO_MONEY',color:'#3AAFC9',v:15},{code:'RTP_WAITING_SALARY',color:'#66C6D8',v:8},{code:'RTP_OTHER',color:'#97DAE6',v:4}]},
       {code:'NKP',color:'#E93D82',v:10,reasons:[{code:'CAB',color:'#E93D82',v:6},{code:'HUP',color:'#F181AC',v:4}]}
     ]},
-    call:{actions:[
-      {code:'INIT',color:'#1E2A3A',v:2450,reasons:[{code:'INIT',color:'#1E2A3A',v:2450}]},
-      {code:'PTP',color:'#2F80ED',v:4900,reasons:[{code:'PTP_TODAY',color:'#2F80ED',v:2700},{code:'PTP_DATE_TO_PAY',color:'#5296F2',v:1800},{code:'PTP_NOT_DAY',color:'#8FBEF8',v:400}]},
-      {code:'RTP',color:'#3AAFC9',v:3675,reasons:[{code:'RTP_NO_MONEY',color:'#3AAFC9',v:2100},{code:'RTP_WAITING_SALARY',color:'#66C6D8',v:1000},{code:'RTP_OTHER',color:'#97DAE6',v:575}]},
-      {code:'NKP',color:'#E93D82',v:1225,reasons:[{code:'CAB',color:'#E93D82',v:700},{code:'HUP',color:'#F181AC',v:525}]}
+    {key:'contact', name:'CONTACT STATUS', level:1, actions:[
+      {code:'NOT_STARTED',color:'#1E2A3A',v:13},
+      {code:'ANSWER',color:'#1BA85C',v:40},
+      {code:'HANG UP',color:'#3AAFC9',v:8},
+      {code:'VOICEMAIL',color:'#E93D82',v:6},
+      {code:'BUSY',color:'#EE5B54',v:5},
+      {code:'NO ANSWER',color:'#5FBCD3',v:9},
+      {code:'NOT AVAILABLE',color:'#F0A93C',v:3},
+      {code:'INVALID NUMBER',color:'#7C5CE0',v:2},
+      {code:'UNKNOW',color:'#2F80ED',v:1}
+    ]},
+    {key:'zfriend', name:'ZALO FRIEND', level:1, actions:[
+      {code:'FRIEND_ACCEPTED',color:'#1BA85C',v:52},
+      {code:'FRIEND_REQUEST_FAILED',color:'#EE5B54',v:21},
+      {code:'NOT_FRIEND',color:'#8A96A3',v:14}
+    ]},
+    {key:'zmsg', name:'ZALO MESSAGE', level:1, actions:[
+      {code:'MESSAGE_SEND_SUCCESS',color:'#1BA85C',v:63},
+      {code:'MESSAGE_SEND_FAILED',color:'#EE5B54',v:24}
     ]}
-  };
-  let khView='kh', selAction='PTP';
+  ];
+  let selDim='action', selAction='PTP';
   function fmt(n){return n.toLocaleString('vi-VN');}
-  function renderKH(){
-    const acts=KHTREE[khView].actions, totalA=acts.reduce((s,a)=>s+a.v,0);
-    document.getElementById('donutAction').innerHTML=donut(acts.map(a=>({v:a.v,c:a.color,name:a.code,code:a.code})),fmt(totalA),selAction);
-    document.getElementById('legAction').innerHTML=acts.map(a=>`<span class="li" style="cursor:pointer;${a.code===selAction?'font-weight:700;color:var(--ink)':''}" data-code="${a.code}"><span class="dot" style="background:${a.color}"></span>${a.code}</span>`).join('');
-    const act=acts.find(a=>a.code===selAction)||acts[0];
-    document.getElementById('donutReason').innerHTML=donut(act.reasons.map(r=>({v:r.v,c:r.color,name:r.code})),fmt(act.v));
-    document.getElementById('reasonTitle').innerHTML='Reason Code của <b>'+act.code+'</b> <span class="fx" data-fx="Donut Reason Code (cấp 2) của Action đang chọn: Seg(r) = số KH có action=A và reason=r; hiển thị Top 5 + gộp Khác.">ⓘ</span>';
-    document.getElementById('legReason').innerHTML=act.reasons.map(r=>`<span class="li"><span class="dot" style="background:${r.color}"></span>${r.code}</span>`).join('');
+  function curDim(){return DIMS.find(d=>d.key===selDim)||DIMS[0];}
+  function renderDimPills(){
+    document.getElementById('dimPills').innerHTML=DIMS.map(d=>
+      `<span class="dim-pill ${d.key===selDim?'on':''}" data-dim="${d.key}">${d.name}<span class="lv">${d.level} CẤP</span></span>`).join('');
   }
-  document.getElementById('donutAction').addEventListener('click',e=>{const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
-  document.getElementById('legAction').addEventListener('click',e=>{const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
+  function renderKH(){
+    const dim=curDim(), acts=dim.actions, totalA=acts.reduce((s,a)=>s+a.v,0);
+    if(!acts.find(a=>a.code===selAction)) selAction=acts[0].code;
+    // Donut trái = cấp 1 của bộ đang chọn
+    document.getElementById('donutAction').innerHTML=donut(acts.map(a=>({v:a.v,c:a.color,name:a.code,code:a.code})),fmt(totalA), dim.level===2?selAction:null);
+    document.getElementById('legAction').innerHTML=acts.map(a=>`<span class="li" style="${dim.level===2?'cursor:pointer;':''}${a.code===selAction&&dim.level===2?'font-weight:700;color:var(--ink)':''}" data-code="${a.code}"><span class="dot" style="background:${a.color}"></span>${a.code}</span>`).join('');
+    const lvlTxt=dim.level===2?' · <span style="color:var(--blue)">bấm để xem cấp 2</span>':'';
+    document.getElementById('actTitle').innerHTML=`${dim.name} — cấp 1${lvlTxt} <span class="fx" data-fx="Donut cấp 1 của bộ '${dim.name}': Seg = số KH có trạng thái cấp 1 = mã đó (theo trạng thái hiện tại của bộ); tâm = tổng KH đã có trạng thái ở bộ này.">ⓘ</span>`;
+    // Donut phải = cấp 2 (chỉ bộ 2 cấp)
+    if(dim.level===2){
+      const act=acts.find(a=>a.code===selAction)||acts[0];
+      document.getElementById('donutReason').innerHTML=donut(act.reasons.map(r=>({v:r.v,c:r.color,name:r.code})),fmt(act.v));
+      document.getElementById('reasonTitle').innerHTML=`Cấp 2 của <b>${act.code}</b> <span class="fx" data-fx="Donut cấp 2 của mã cấp 1 đang chọn: Seg = số KH có cấp 1 = ${act.code} và cấp 2 = mã đó; hiển thị Top 5 + gộp Khác.">ⓘ</span>`;
+      document.getElementById('legReason').innerHTML=act.reasons.map(r=>`<span class="li"><span class="dot" style="background:${r.color}"></span>${r.code}</span>`).join('');
+    }else{
+      document.getElementById('donutReason').innerHTML=`<div class="dim-empty">Bộ <b>${dim.name}</b> là <b>trạng thái 1 cấp</b> — không có cấp 2.<br>Phân bố đã thể hiện ở donut bên trái.</div>`;
+      document.getElementById('reasonTitle').innerHTML='';
+      document.getElementById('legReason').innerHTML='';
+    }
+  }
+  document.getElementById('dimPills').addEventListener('click',e=>{const c=e.target.closest('[data-dim]');if(c){selDim=c.dataset.dim;selAction=curDim().actions[0].code;renderDimPills();renderKH();}});
+  document.getElementById('donutAction').addEventListener('click',e=>{if(curDim().level!==2)return;const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
+  document.getElementById('legAction').addEventListener('click',e=>{if(curDim().level!==2)return;const c=e.target.closest('[data-code]');if(c){selAction=c.dataset.code;renderKH();}});
   document.getElementById('rfill').style.width=Math.round(87/100*100)+'%';
-  renderKH();
+  renderDimPills();renderKH();
 
   // ---- Báo cáo TAT (n ngày) ----
   const connDist=[1400,900,500,250,100,50]; // số hợp đồng theo số ngày tới lúc kết nối (d=0..5)
