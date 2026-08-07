@@ -116,6 +116,9 @@
   .ne-tile .nt-l{font-size:11.5px;color:var(--sub);margin-top:3px;line-height:1.3;}
   .ne-note{font-size:12px;color:var(--sub);margin-top:13px;background:var(--grey-soft);border-radius:8px;padding:10px 13px;line-height:1.5;}
   .ne-note b{color:var(--ink);}
+  .ne-single{border:1px solid #F1B6B1;border-left:4px solid var(--red);border-radius:11px;padding:16px 22px;background:var(--red-soft);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .ne-single .nt-n{font-size:32px;font-weight:800;font-family:var(--mono);color:var(--red);line-height:1;}
+  .ne-single .nt-l{font-size:13px;color:#7A2A24;font-weight:600;}
   .fx{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#E7F0FC;color:#2F80ED;font-size:9.5px;font-weight:700;cursor:help;margin-left:5px;vertical-align:middle;border:1px solid #BFD9F7;}
   .fxtip{position:fixed;z-index:300;max-width:340px;background:#0F1620;color:#EAF0F5;border-radius:10px;padding:10px 13px;font-size:11.5px;line-height:1.55;box-shadow:0 10px 28px rgba(0,0,0,.4);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s;}
   .fxtip.show{opacity:1;transform:none;}
@@ -172,14 +175,7 @@
       <div class="oa-ic">⚠️</div>
       <div class="oa-body">
         <div class="oa-t">Cảnh báo điều phối — 128 cuộc chưa quay số được (chưa qua tổng đài)</div>
-        <div class="oa-d">Các lỗi ở tầng hệ thống/điều phối, KH vẫn giữ trạng thái <b>INIT</b> và được tự động đưa lại hàng đợi khi khắc phục. Không tính vào tỷ lệ kết nối, không trừ số lần gọi. <span class="fx" data-fx="Cảnh báo điều phối = tổng số lượt thử KHÔNG tạo được cuộc qua tổng đài trong cửa sổ giám sát (hết cước / tổng đài lỗi / đầu số bị chặn / vượt kênh CCU / lỗi định tuyến). Nguồn: log điều phối engine, KHÔNG phải mã SIP.">ⓘ</span></div>
-        <div class="oa-chips">
-          <span class="ops-chip">Hết cước<b>0</b></span>
-          <span class="ops-chip">Tổng đài lỗi / không khả dụng<b>96</b></span>
-          <span class="ops-chip">Đầu số bị chặn (không quay được)<b>18</b></span>
-          <span class="ops-chip">Vượt kênh đồng thời (CCU)<b>11</b></span>
-          <span class="ops-chip">Lỗi định tuyến / trunk<b>3</b></span>
-        </div>
+        <div class="oa-d">Các lỗi ở tầng hệ thống/điều phối (gộp chung, không tách nguyên nhân). KH vẫn giữ trạng thái <b>INIT</b> và được tự động đưa lại hàng đợi khi khắc phục. Không tính vào tỷ lệ kết nối, không trừ số lần gọi. <span class="fx" data-fx="Cảnh báo điều phối = tổng số lượt thử KHÔNG tạo được cuộc qua tổng đài trong cửa sổ giám sát. Gộp chung mọi nguyên nhân (khó detect chính xác). Nguồn: log điều phối engine, KHÔNG phải mã SIP.">ⓘ</span></div>
       </div>
     </div>
     <div class="mon-sec">
@@ -202,14 +198,11 @@
     </div>
     <div class="mon-sec">
       <div class="mon-h">Cuộc gọi không thực hiện được (lỗi điều phối · chưa qua tổng đài) <span class="fx" data-fx="Khối tách RIÊNG khỏi 9 trạng thái cuộc gọi (post-tổng-đài). Đây là lượt thử KHÔNG tạo được cuộc qua tổng đài → không có mã SIP. Nguồn: log điều phối engine.">ⓘ</span></div>
-      <div class="ne-grid">
-        <div class="ne-tile"><div class="nt-n">0</div><div class="nt-l">Hết cước<br>(doanh nghiệp)</div></div>
-        <div class="ne-tile warn"><div class="nt-n">96</div><div class="nt-l">Tổng đài lỗi /<br>không khả dụng</div></div>
-        <div class="ne-tile"><div class="nt-n">18</div><div class="nt-l">Đầu số bị chặn<br>(không quay được)</div></div>
-        <div class="ne-tile"><div class="nt-n">11</div><div class="nt-l">Vượt kênh<br>đồng thời (CCU)</div></div>
-        <div class="ne-tile"><div class="nt-n">3</div><div class="nt-l">Lỗi định tuyến /<br>trunk khác</div></div>
+      <div class="ne-single">
+        <div class="nt-n">128</div>
+        <div class="nt-l">lượt thử không thực hiện được (chưa qua tổng đài) — gộp chung mọi nguyên nhân hệ thống/điều phối</div>
       </div>
-      <div class="ne-note">Tổng <b>128</b> lượt thử không thực hiện được. Khác với <b>"Chưa xác định"</b> (đã tới tổng đài nhưng chưa map được mã SIP) và <b>"Nhà mạng chặn"</b> (đã tới tổng đài, nhà mạng từ chối). Nhóm này <b>giữ HĐ ở trạng thái INIT</b>, <b>tự requeue/recall</b> khi khắc phục, <b>không trừ Spin / không tăng số lần gọi</b>, và <b>loại khỏi mẫu số</b> tỷ lệ nghe máy / tỷ lệ kết nối. Chi tiết: xuất báo cáo Excel theo nguyên nhân.</div>
+      <div class="ne-note"><b>Thống kê chung 1 con số</b>, không tách nguyên nhân (hết cước / tổng đài lỗi / đầu số bị chặn / vượt CCU…) vì hệ thống <b>khó detect chính xác</b> nguyên nhân gốc. Khác với <b>"Chưa xác định"</b> (đã tới tổng đài nhưng chưa map được mã SIP) và <b>"Nhà mạng chặn"</b> (đã tới tổng đài, nhà mạng từ chối). Nhóm này <b>giữ HĐ ở trạng thái INIT</b>, <b>tự requeue/recall</b> khi khắc phục, <b>không trừ Spin / không tăng số lần gọi</b>, và <b>loại khỏi mẫu số</b> tỷ lệ nghe máy / tỷ lệ kết nối.</div>
     </div>
     <div class="tscroll">
       <table>
