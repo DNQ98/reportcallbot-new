@@ -105,6 +105,7 @@
   .chart-legend{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;}
   .chart-legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);}
   .chart-legend .dot{width:11px;height:11px;border-radius:3px;flex:none;}
+  .chart-legend .dot.hollow{border-radius:50%;border:2px solid;background:transparent!important;}
   .donut-lbl{text-align:center;font-size:13px;color:var(--sub);margin-top:8px;}
   .ops-alert{display:flex;gap:12px;align-items:flex-start;background:var(--red-soft);border:1px solid #F1B6B1;border-left:4px solid var(--red);border-radius:12px;padding:12px 16px;margin-bottom:16px;}
   .ops-alert .oa-ic{font-size:18px;line-height:1.15;}
@@ -149,7 +150,7 @@
   svg rect:hover,svg polygon:hover{opacity:.82;cursor:default;}
 </style>
 
-<div class="anno">Mockup Báo cáo Callbot MAFC · <b>3 tab theo feature</b> (Lịch sử cuộc gọi · Theo khách hàng · Callbot NLU) — mỗi tab gồm biểu đồ giám sát + bảng · FR-030 · số liệu minh họa</div>
+<div class="anno">Mockup Báo cáo Callbot MAFC · <b>4 tab</b> (Dữ liệu thu thập [giữ nguyên OMICRM] · Lịch sử cuộc gọi · Khách hàng · Callbot) — 3 tab sau là phần nâng cấp FR-030 (biểu đồ giám sát + bảng) · số liệu minh họa</div>
 
 <div class="wrap">
   <div class="htabs">
@@ -161,9 +162,10 @@
   </div>
 
   <div class="subtabs">
-    <span class="pill on" data-tab="cdr">📞 Lịch sử cuộc gọi <span class="n">giám sát + CDR</span></span>
-    <span class="pill" data-tab="kh">👤 Khách hàng <span class="n">giám sát + bảng</span></span>
-    <span class="pill" data-tab="nlu">🤖 Callbot </span>
+    <span class="pill" data-tab="collect">Dữ liệu thu thập</span>
+    <span class="pill on" data-tab="cdr">Lịch sử cuộc gọi</span>
+    <span class="pill" data-tab="kh">Khách hàng</span>
+    <span class="pill" data-tab="nlu">Callbot</span>
     <span class="dl">⬇ Tải về Excel</span>
   </div>
 
@@ -173,6 +175,14 @@
     <span class="f">Trạng thái cuộc gọi ▾</span>
     <span class="f">Action / Reason Code ▾</span>
     <span class="cnt" id="cnt">102 cuộc gọi · 75/150 CCU</span>
+  </div>
+
+  <!-- ============ DASHBOARD 0: Dữ liệu thu thập (giữ nguyên OMICRM) ============ -->
+  <div class="pane" id="collect">
+    <div class="mon-sec">
+      <div class="mon-h">Dữ liệu thu thập <span class="fx" data-fx="Báo cáo hiện có của OMICRM (phân tích hội thoại: usersay/intent/entity, tần suất từ khoá…). Giữ nguyên, không thuộc phạm vi nâng cấp FR-030.">ⓘ</span></div>
+      <div class="ne-note">Tab <b>"Dữ liệu thu thập"</b> là báo cáo <b>hiện có của OMICRM</b> (phân tích hội thoại: intent/entity, đám mây từ khoá, tỷ lệ nhận diện…) — <b>giữ nguyên, không thuộc phạm vi nâng cấp</b>. 3 tab bên phải (Lịch sử cuộc gọi / Khách hàng / Callbot) là phần bổ sung cho MAFC (FR-030).</div>
+    </div>
   </div>
 
   <!-- ============ DASHBOARD 1: CDR — Lịch sử cuộc gọi + Giám sát cuộc gọi ============ -->
@@ -489,8 +499,8 @@
     const r=68,cx=90,cy=90,c=2*Math.PI*r,dash=(val/max)*c;
     return `<svg width="180" height="180" viewBox="0 0 180 180">
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#E9ECF0" stroke-width="20"/>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#F08A24" stroke-width="20" stroke-linecap="round" stroke-dasharray="${dash} ${c-dash}" transform="rotate(-90 ${cx} ${cy})"/>
-      <circle cx="${cx}" cy="${cy}" r="${r-16}" fill="none" stroke="#F3B87A" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(val/max)*2*Math.PI*(r-16)} ${2*Math.PI*(r-16)}" transform="rotate(-90 ${cx} ${cy})"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#2F80ED" stroke-width="20" stroke-linecap="round" stroke-dasharray="${dash} ${c-dash}" transform="rotate(-90 ${cx} ${cy})"/>
+      <circle cx="${cx}" cy="${cy}" r="${r-16}" fill="none" stroke="#9CC2F5" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(val/max)*2*Math.PI*(r-16)} ${2*Math.PI*(r-16)}" transform="rotate(-90 ${cx} ${cy})"/>
       <text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="23" font-weight="800" fill="#1E2A3A">${val}/${max}</text>
       <text x="${cx}" y="${cy+20}" text-anchor="middle" font-size="15" font-weight="700" fill="#1E2A3A">CCU</text></svg>`;
   }
@@ -530,7 +540,7 @@
       off+=f;});
     return `<svg width="220" height="220" viewBox="0 0 220 220">${ring}${inner}<text x="${cx}" y="${cy+7}" text-anchor="middle" font-size="23" font-weight="800" fill="#1E2A3A">${center}</text></svg>`;
   }
-  function legend(id,labels){document.getElementById(id).innerHTML=STATUS.map((s,i)=>`<span class="li"><span class="dot" style="background:${s.c}"></span>${labels?labels[i]:s.name}</span>`).join('');}
+  function legend(id,labels,hollow){document.getElementById(id).innerHTML=STATUS.map((s,i)=>`<span class="li"><span class="dot${hollow?' hollow':''}" style="${hollow?'border-color:'+s.c:'background:'+s.c}"></span>${labels?labels[i]:s.name}</span>`).join('');}
 
   document.getElementById('ccuGauge').innerHTML=gauge(75,150);
   document.getElementById('areaChart').innerHTML=stackedArea(areaData);
@@ -538,8 +548,8 @@
   renderBar(false);
   document.getElementById('donut1').innerHTML=donut([{v:45,c:'#1F9E4E',name:'Nghe máy'},{v:25,c:'#6FA894',name:'Máy bận'},{v:30,c:'#F08A24',name:'Không tồn tại'}],'12.250');
   document.getElementById('donut2').innerHTML=donut([{v:55,c:'#1F9E4E',name:'Nghe máy'},{v:25,c:'#7A828C',name:'Chưa xác định'},{v:20,c:'#F08A24',name:'Không tồn tại'}],'12.250');
-  legend('legend1');
-  legend('legend2',['Nghe máy (87-50%)','Máy bận (100-83%)','Không nghe máy','Voicemail (100-83%)','Ngoài vùng phủ sóng','Không tồn tại','Nhà mạng chặn (100-83%)','Chưa xác định','Do Not Call']);
+  legend('legend1',null,true);
+  legend('legend2');
   document.getElementById('segQty').addEventListener('click',function(){this.classList.add('on');document.getElementById('segPct').classList.remove('on');renderBar(false);});
   document.getElementById('segPct').addEventListener('click',function(){this.classList.add('on');document.getElementById('segQty').classList.remove('on');renderBar(true);});
 
@@ -630,4 +640,17 @@
   document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-fx]');if(!el)return;fxtip.textContent=el.getAttribute('data-fx');fxtip.classList.add('show');});
   document.addEventListener('mousemove',e=>{if(!fxtip.classList.contains('show'))return;let x=e.clientX+14,y=e.clientY+16,w=fxtip.offsetWidth,h=fxtip.offsetHeight;if(x+w>window.innerWidth)x=e.clientX-w-14;if(y+h>window.innerHeight)y=e.clientY-h-16;fxtip.style.left=x+'px';fxtip.style.top=Math.max(56,y)+'px';});
   document.addEventListener('mouseout',e=>{if(e.target.closest('[data-fx]'))fxtip.classList.remove('show');});
+
+  // ---- Tự chèn cột "#" (STT) vào đầu mọi bảng dữ liệu ----
+  document.querySelectorAll('.tscroll table').forEach(tbl=>{
+    const hr=tbl.querySelector('thead tr');
+    if(hr && !hr.dataset.numbered){
+      const th=document.createElement('th');th.textContent='#';th.style.width='34px';
+      hr.insertBefore(th,hr.firstChild);hr.dataset.numbered='1';
+    }
+    tbl.querySelectorAll('tbody tr').forEach((tr,i)=>{
+      const td=document.createElement('td');td.textContent=i+1;td.style.color='#8A96A3';td.style.fontWeight='600';
+      tr.insertBefore(td,tr.firstChild);
+    });
+  });
 </script>
