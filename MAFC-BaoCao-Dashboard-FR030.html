@@ -342,7 +342,7 @@
         <div style="text-align:center"><div id="donutAction"></div><div class="donut-lbl" id="actTitle"></div><div class="chart-legend" id="legAction" style="justify-content:center"></div></div>
         <div style="text-align:center"><div id="donutReason"></div><div class="donut-lbl" id="reasonTitle"></div><div class="chart-legend" id="legReason" style="justify-content:center"></div></div>
       </div>
-      <div class="note" style="margin-top:14px">Một KH có thể mang <b>nhiều bộ trạng thái</b> (ACTION CODE, CONTACT STATUS, ZALO FRIEND, ZALO MESSAGE…); <b>mỗi cuộc gọi chỉ cập nhật 1 bộ</b>. Chọn bộ ở trên để xem phân bố: bộ <b>2 cấp</b> → bấm 1 mã cấp 1 ở donut trái để xem chi tiết cấp 2 bên phải; bộ <b>1 cấp</b> → chỉ có donut trái. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái hiện tại của bộ đó). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
+      <div class="note" style="margin-top:14px"><b>Toàn bộ báo cáo Khách hàng lấy theo LỊCH SỬ CẬP NHẬT trạng thái KH phát sinh TỪ PHIÊN NÀY</b> (không phải snapshot toàn hệ thống — trạng thái do phiên/kênh khác cập nhật không tính vào đây). Một KH có thể mang <b>nhiều bộ trạng thái</b> (ACTION CODE, CONTACT STATUS, ZALO FRIEND, ZALO MESSAGE…); <b>mỗi cuộc gọi chỉ cập nhật 1 bộ</b>. Chọn bộ ở trên để xem phân bố: bộ <b>2 cấp</b> → bấm 1 mã cấp 1 ở donut trái để xem chi tiết cấp 2 bên phải; bộ <b>1 cấp</b> → chỉ có donut trái. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái <b>phiên đã cập nhật gần nhất</b> cho bộ đó). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
     </div>
     <div class="tscroll">
       <table>
@@ -394,8 +394,8 @@
       </table>
     </div>
     <div class="note">
-      Mỗi dòng = 1 <b>khách hàng</b> (gộp mọi cuộc gọi). Last / Best action code <b>chỉ là 1 code</b>, lấy từ <b>bộ trạng thái khách hàng</b> (module Khách hàng — đối tác khai báo ở OMI): <b>cấp 1 = Action Code</b> (<span class="scode" style="background:#1E2A3A">INIT</span> <span class="scode" style="background:#2F80ED">PTP</span> <span class="scode" style="background:#3AAFC9">RTP</span> <span class="scode" style="background:#E93D82">NKP</span>) · cấp 2 = Reason Code (PTP_TODAY, RTP_NO_MONEY…).
-      <br>• <b>Last action code</b> = trạng thái cuộc gọi <b>kết thúc trong flow</b>; nhiều cuộc → lấy trạng thái <b>"xa" nhất theo thứ tự khai báo</b> trong bộ trạng thái.
+      Mỗi dòng = 1 <b>khách hàng</b> (gộp các cuộc gọi <b>trong phiên</b>). <b>Danh mục</b> trạng thái do module Khách hàng khai báo (cấp 1 = Action Code: <span class="scode" style="background:#1E2A3A">INIT</span> <span class="scode" style="background:#2F80ED">PTP</span> <span class="scode" style="background:#3AAFC9">RTP</span> <span class="scode" style="background:#E93D82">NKP</span> · cấp 2 = Reason Code: PTP_TODAY, RTP_NO_MONEY…); nhưng <b>GIÁ TRỊ Last/Best lấy theo lịch sử cập nhật trạng thái TỪ PHIÊN NÀY</b>, không lấy snapshot toàn hệ thống.
+      <br>• <b>Last action code</b> = trạng thái <b>phiên cập nhật gần nhất</b> cho KH (cuộc gọi kết thúc trong flow); nhiều cuộc trong phiên → lấy trạng thái <b>"xa" nhất theo thứ tự khai báo</b>.
       <br>• <b>Best action code</b> = trạng thái được đánh dấu <span class="lvl">best</span>; nếu không có "best" → lấy theo Last action code. (VD: Trần Thị Bình — Last = <span class="scode" style="background:#3AAFC9">RTP</span>, Best = <span class="scode" style="background:#2F80ED">PTP</span>.)
     </div>
   </div>
@@ -597,7 +597,7 @@
     document.getElementById('donutAction').innerHTML=donut(acts.map(a=>({v:a.v,c:a.color,name:a.code,code:a.code})),fmt(totalA), dim.level===2?selAction:null);
     document.getElementById('legAction').innerHTML=acts.map(a=>`<span class="li" style="${dim.level===2?'cursor:pointer;':''}${a.code===selAction&&dim.level===2?'font-weight:700;color:var(--ink)':''}" data-code="${a.code}"><span class="dot" style="background:${a.color}"></span>${a.code}</span>`).join('');
     const lvlTxt=dim.level===2?' · <span style="color:var(--blue)">bấm để xem cấp 2</span>':'';
-    document.getElementById('actTitle').innerHTML=`${dim.name} — cấp 1${lvlTxt} <span class="fx" data-fx="Donut cấp 1 của bộ '${dim.name}': Seg = số KH có trạng thái cấp 1 = mã đó (theo trạng thái hiện tại của bộ); tâm = tổng KH đã có trạng thái ở bộ này.">ⓘ</span>`;
+    document.getElementById('actTitle').innerHTML=`${dim.name} — cấp 1${lvlTxt} <span class="fx" data-fx="Donut cấp 1 của bộ '${dim.name}': Seg = số KH có trạng thái cấp 1 = mã đó (theo trạng thái PHIÊN NÀY cập nhật, không phải snapshot hệ thống); tâm = tổng KH phiên đã cập nhật ở bộ này.">ⓘ</span>`;
     // Donut phải = cấp 2 (chỉ bộ 2 cấp)
     if(dim.level===2){
       const act=acts.find(a=>a.code===selAction)||acts[0];
