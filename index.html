@@ -94,14 +94,14 @@
   /* ---- monitoring dashboard ---- */
   .mon-sec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(16,24,40,.03);}
   .mon-h{font-size:15px;font-weight:700;margin:0 0 16px;}
-  .mon-rt{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:center;}
+  .mon-rt{display:block;}
   @media(max-width:900px){.mon-rt{grid-template-columns:1fr;}.mon-cg{grid-template-columns:1fr!important;}}
   .gauge-wrap{text-align:center;}
   .gauge-lbl{font-size:13px;color:var(--sub);margin-top:8px;}
   .seg-toggle{display:inline-flex;background:#EEF1F5;border-radius:10px;padding:4px;gap:4px;margin-bottom:18px;}
   .seg-toggle button{border:none;background:transparent;padding:8px 20px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;color:#7A8794;cursor:pointer;}
   .seg-toggle button.on{background:var(--green);color:#fff;}
-  .mon-cg{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:18px;align-items:center;}
+  .mon-cg{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:center;}
   .chart-legend{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;}
   .chart-legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);}
   .chart-legend .dot{width:11px;height:11px;border-radius:3px;flex:none;}
@@ -174,7 +174,7 @@
     <span class="f">Mã chiến dịch ▾</span>
     <span class="f">Trạng thái cuộc gọi ▾</span>
     <span class="f">Action / Reason Code ▾</span>
-    <span class="cnt" id="cnt">102 cuộc gọi · 75/150 CCU</span>
+    <span class="cnt" id="cnt">102 cuộc gọi</span>
   </div>
 
   <!-- ============ DASHBOARD 0: Dữ liệu thu thập (giữ nguyên OMICRM) ============ -->
@@ -197,7 +197,6 @@
     <div class="mon-sec">
       <div class="mon-h">Giám sát realtime</div>
       <div class="mon-rt">
-        <div class="gauge-wrap"><div id="ccuGauge"></div><div class="gauge-lbl">Cuộc gọi đồng thời <span class="fx" data-fx="Gauge CCU: value = số cuộc đang active (gồm cả đang đổ chuông); % = CCU hiện tại ÷ CCU tối đa (cấu hình). Cập nhật realtime qua API.">ⓘ</span></div></div>
         <div><div id="areaChart"></div><div class="donut-lbl">Trạng thái cuộc gọi theo thời gian <span class="fx" data-fx="Vùng chồng: V(s,b) = số cuộc gọi có trạng thái s và KẾT THÚC trong bucket [b, b+5′). Bucket 5′, cửa sổ 60′ cố định; xếp chồng theo legend.">ⓘ</span></div></div>
       </div>
       <div class="chart-legend" id="legend1"></div>
@@ -208,7 +207,6 @@
       <div class="mon-cg">
         <div><div id="barChart"></div><div class="donut-lbl">Cuộc gọi theo mốc 30′ <span class="fx" data-fx="Cột chồng theo mốc 30′. Theo số lượng: Bar(s,b) = số cuộc trạng thái s kết thúc trong [b, b+30′). Theo tỷ lệ: Bar(s,b) ÷ tổng cột × 100.">ⓘ</span></div></div>
         <div><div id="donut1"></div><div class="donut-lbl">Tổng số cuộc gọi <span class="fx" data-fx="Donut Tổng số cuộc gọi: Seg(s) = số cuộc gọi có trạng thái s; tâm = tổng số cuộc gọi.">ⓘ</span></div></div>
-        <div><div id="donut2"></div><div class="donut-lbl">Thời lượng nghe máy <span class="fx" data-fx="Donut Thời lượng nghe máy: TÂM = TỔNG thời lượng đàm thoại (billsec) toàn phiên; mỗi cung = tỷ trọng SỐ cuộc Nghe máy theo khoảng thời lượng (<30s / 30–60s / 1–3′ / >3′). Chỉ tính cuộc đã kết nối (billsec>0).">ⓘ</span></div><div class="chart-legend" id="donut2leg" style="justify-content:center;margin-top:6px"></div></div>
       </div>
       <div class="chart-legend" id="legend2"></div>
     </div>
@@ -464,7 +462,7 @@
       p.classList.add('on');
       const t=p.dataset.tab;
       document.querySelectorAll('.pane').forEach(pn=>pn.classList.toggle('on',pn.id===t));
-      const map={cdr:'102 cuộc gọi · 75/150 CCU',kh:'87 khách hàng',nlu:'182 câu nói'};
+      const map={cdr:'102 cuộc gọi',kh:'87 khách hàng',nlu:'182 câu nói'};
       document.getElementById('cnt').textContent=map[t];
     });
   });
@@ -542,16 +540,12 @@
   }
   function legend(id,labels,hollow){document.getElementById(id).innerHTML=STATUS.map((s,i)=>`<span class="li"><span class="dot${hollow?' hollow':''}" style="${hollow?'border-color:'+s.c:'background:'+s.c}"></span>${labels?labels[i]:s.name}</span>`).join('');}
 
-  document.getElementById('ccuGauge').innerHTML=gauge(75,150);
   document.getElementById('areaChart').innerHTML=stackedArea(areaData);
   function renderBar(pct){document.getElementById('barChart').innerHTML=stackedBar(barData,pct);}
   renderBar(false);
   document.getElementById('donut1').innerHTML=donut([{v:45,c:'#1F9E4E',name:'Nghe máy'},{v:25,c:'#6FA894',name:'Máy bận'},{v:30,c:'#F08A24',name:'Không tồn tại'}],'12.250');
-  const DUR_BUCKETS=[{v:18,c:'#C7E9CE',name:'< 30 giây'},{v:34,c:'#86CE9E',name:'30–60 giây'},{v:31,c:'#46B173',name:'1–3 phút'},{v:17,c:'#1F8A4C',name:'> 3 phút'}];
-  document.getElementById('donut2').innerHTML=donut(DUR_BUCKETS,'412g 30′');
   legend('legend1',null,true);
   legend('legend2');
-  document.getElementById('donut2leg').innerHTML=DUR_BUCKETS.map(s=>`<span class="li"><span class="dot" style="background:${s.c}"></span>${s.name}</span>`).join('');
   document.getElementById('segQty').addEventListener('click',function(){this.classList.add('on');document.getElementById('segPct').classList.remove('on');renderBar(false);});
   document.getElementById('segPct').addEventListener('click',function(){this.classList.add('on');document.getElementById('segQty').classList.remove('on');renderBar(true);});
 
