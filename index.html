@@ -169,13 +169,6 @@
     <span class="dl">⬇ Tải về Excel</span>
   </div>
 
-  <div class="filt">
-    <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
-    <span class="f">Mã chiến dịch ▾</span>
-    <span class="f">Trạng thái cuộc gọi ▾</span>
-    <span class="f">Action / Reason Code ▾</span>
-    <span class="cnt" id="cnt">102 cuộc gọi</span>
-  </div>
 
   <!-- ============ DASHBOARD 0: Dữ liệu thu thập (giữ nguyên OMICRM) ============ -->
   <div class="pane" id="collect">
@@ -187,6 +180,18 @@
 
   <!-- ============ DASHBOARD 1: CDR — Lịch sử cuộc gọi + Giám sát cuộc gọi ============ -->
   <div class="pane on" id="cdr">
+    <div class="filt">
+      <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
+      <span class="f">Đầu số ▾</span>
+      <span class="f">Loại cuộc gọi ▾</span>
+      <span class="f">Hình thức ▾</span>
+      <span class="f">Trạng thái cuộc gọi ▾</span>
+      <span class="f">Phân loại ▾</span>
+      <span class="f">Nhân viên ▾</span>
+      <span class="f">Tag ▾</span>
+      <span class="f">🔍 Tìm kiếm</span>
+      <span class="cnt">102 cuộc gọi</span>
+    </div>
     <div class="ops-alert">
       <div class="oa-ic">⚠️</div>
       <div class="oa-body">
@@ -303,6 +308,14 @@
 
   <!-- ============ DASHBOARD 2: THEO KHÁCH HÀNG + Giám sát khách hàng ============ -->
   <div class="pane" id="kh">
+    <div class="filt">
+      <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
+      <span class="f">Bộ trạng thái ▾</span>
+      <span class="f">Tag / Nhóm ▾</span>
+      <span class="f">Tiếp cận ▾</span>
+      <span class="f">🔍 Tìm kiếm</span>
+      <span class="cnt">87 khách hàng</span>
+    </div>
     <div class="mon-sec">
       <div class="mon-h" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <span>Báo cáo TAT (n ngày)</span>
@@ -400,6 +413,14 @@
 
   <!-- ============ DASHBOARD 3: BÁO CÁO CALLBOT (NLU) ============ -->
   <div class="pane" id="nlu">
+    <div class="filt">
+      <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
+      <span class="f">Intent ▾</span>
+      <span class="f">Độ chính xác ▾</span>
+      <span class="f">Phân loại ▾</span>
+      <span class="f">🔍 Tìm kiếm</span>
+      <span class="cnt">182 câu nói</span>
+    </div>
     <div class="tscroll">
       <table>
         <thead>
@@ -462,8 +483,6 @@
       p.classList.add('on');
       const t=p.dataset.tab;
       document.querySelectorAll('.pane').forEach(pn=>pn.classList.toggle('on',pn.id===t));
-      const map={cdr:'102 cuộc gọi',kh:'87 khách hàng',nlu:'182 câu nói'};
-      document.getElementById('cnt').textContent=map[t];
     });
   });
 
