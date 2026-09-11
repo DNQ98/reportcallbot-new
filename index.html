@@ -33,6 +33,8 @@
   .filt{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 13px;margin-bottom:16px;flex-wrap:wrap;}
   .filt .f{display:flex;align-items:center;gap:5px;color:var(--sub);font-size:13px;padding:5px 9px;border-radius:8px;background:#F6F8FB;}
   .filt .cnt{margin-left:auto;color:var(--label);font-size:12.5px;}
+  .tsearch{margin:16px 0 10px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;color:#9AA6B2;font-size:13.5px;display:flex;align-items:center;gap:8px;background:#fff;}
+  .tsearch b{color:var(--label);font-weight:600;}
 
   .pane{display:none;} .pane.on{display:block;}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.03);}
@@ -189,8 +191,6 @@
       <span class="f">Phân loại ▾</span>
       <span class="f">Nhân viên ▾</span>
       <span class="f">Tag ▾</span>
-      <span class="f">🔍 Tìm kiếm</span>
-      <span class="cnt">102 cuộc gọi</span>
     </div>
     <div class="ops-alert">
       <div class="oa-ic">⚠️</div>
@@ -223,6 +223,7 @@
       </div>
       <div class="ne-note"><b>Thống kê chung 1 con số</b>, không tách nguyên nhân (hết cước / tổng đài lỗi / đầu số bị chặn / vượt CCU…) vì hệ thống <b>khó detect chính xác</b> nguyên nhân gốc. Khác với <b>"Chưa xác định"</b> (đã tới tổng đài nhưng chưa map được mã SIP) và <b>"Nhà mạng chặn"</b> (đã tới tổng đài, nhà mạng từ chối). Nhóm này <b>giữ HĐ ở trạng thái INIT</b>, <b>tự requeue/recall</b> khi khắc phục, <b>không trừ Spin / không tăng số lần gọi</b>, và <b>loại khỏi mẫu số</b> tỷ lệ nghe máy / tỷ lệ kết nối.</div>
     </div>
+    <div class="tsearch">🔍 Tìm kiếm <b>| 102 cuộc gọi</b></div>
     <div class="tscroll">
       <table>
         <thead>
@@ -312,8 +313,6 @@
       <span class="f">⏱ Thời gian: 01/08 – 03/08/2026 ▾</span>
       <span class="f">Trạng thái tổng đài ▾</span>
       <span class="f">Trạng thái khách hàng ▾</span>
-      <span class="f">🔍 Tìm kiếm</span>
-      <span class="cnt">87 khách hàng</span>
     </div>
     <div class="mon-sec">
       <div class="mon-h" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
@@ -354,6 +353,7 @@
       </div>
       <div class="note" style="margin-top:14px"><b>Toàn bộ báo cáo Khách hàng lấy theo LỊCH SỬ CẬP NHẬT trạng thái KH phát sinh TỪ PHIÊN NÀY</b> (không phải snapshot toàn hệ thống — trạng thái do phiên/kênh khác cập nhật không tính vào đây). Một KH có thể mang <b>nhiều bộ trạng thái</b> (ACTION CODE, CONTACT STATUS, ZALO FRIEND, ZALO MESSAGE…); <b>mỗi cuộc gọi chỉ cập nhật 1 bộ</b>. Chọn bộ ở trên để xem phân bố: bộ <b>2 cấp</b> → bấm 1 mã cấp 1 ở donut trái để xem chi tiết cấp 2 bên phải; bộ <b>1 cấp</b> → chỉ có donut trái. Thống kê <b>theo khách hàng</b> (mỗi KH tính 1 lần theo trạng thái <b>phiên đã cập nhật gần nhất</b> cho bộ đó). Chi tiết đầy đủ → <b>xuất báo cáo Excel</b>.</div>
     </div>
+    <div class="tsearch">🔍 Tìm kiếm <b>| 87 khách hàng</b></div>
     <div class="tscroll">
       <table>
         <thead>
@@ -417,9 +417,8 @@
       <span class="f">Intent ▾</span>
       <span class="f">Độ chính xác ▾</span>
       <span class="f">Phân loại ▾</span>
-      <span class="f">🔍 Tìm kiếm</span>
-      <span class="cnt">182 câu nói</span>
     </div>
+    <div class="tsearch">🔍 Tìm kiếm <b>| 182 câu nói</b></div>
     <div class="tscroll">
       <table>
         <thead>
