@@ -40,6 +40,14 @@
   .fdd{position:absolute;left:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--border2,#D6DCE3);border-radius:10px;box-shadow:0 10px 28px rgba(16,24,40,.16);min-width:190px;max-height:300px;overflow:auto;z-index:40;padding:4px 0;}
   .fdd .o{padding:8px 14px;font-size:13px;color:#2B3648;white-space:nowrap;cursor:pointer;}
   .fdd .o:hover{background:#F1F6FD;}
+  .frange{position:absolute;left:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--border2,#D6DCE3);border-radius:10px;box-shadow:0 10px 28px rgba(16,24,40,.16);z-index:40;padding:12px 13px;width:230px;}
+  .frange .rlbl{font-size:11.5px;font-weight:700;color:var(--label);margin-bottom:8px;}
+  .frange .rrow{display:flex;align-items:center;gap:8px;}
+  .frange .rin{flex:1;border:1px solid var(--border2,#D6DCE3);border-radius:8px;padding:7px 9px;font-family:inherit;font-size:13px;color:var(--ink);width:100%;outline:none;background:#F6F8FB;}
+  .frange .rin:focus{border-color:var(--blue);background:#fff;}
+  .frange .rsep{color:#9AA6B2;font-size:12px;}
+  .frange .runit{font-size:12px;color:#8A96A3;}
+  .frange .rbtn{margin-top:10px;width:100%;background:var(--green,#1BA85C);color:#fff;border:none;border-radius:8px;padding:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
 
   .pane{display:none;} .pane.on{display:block;}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.03);}
@@ -192,6 +200,7 @@
       <span class="f" data-dd="100091110|1900 636 999|02873 007 999|VIHAT">Đầu số ▾</span>
       <span class="f" data-dd="Nghe máy|Máy bận|Không nghe máy|Voicemail|Ngoài vùng phủ sóng|Không tồn tại|Nhà mạng chặn|Chưa xác định|Do Not Call">Trạng thái cuộc gọi ▾</span>
       <span class="f" data-dd="INIT|PTP_TODAY|PTP_DATE_TO_PAY|PTP_NOT_DAY|RTP_NO_MONEY|RTP_WAITING_SALARY|RTP_OTHER|CAB|HUP">Phân loại ▾</span>
+      <span class="f" data-range="1">Thời lượng đàm thoại ▾</span>
     </div>
     <div class="ops-alert">
       <div class="oa-ic">⚠️</div>
@@ -690,6 +699,29 @@
       chip.appendChild(dd);
     });
   });
-  document.addEventListener('click',function(){document.querySelectorAll('.fdd').forEach(function(d){d.remove();});});
+  // Range filter (Từ n1 → Đến n2 giây)
+  document.querySelectorAll('.filt .f[data-range]').forEach(function(chip){
+    chip.dataset.label=chip.textContent.replace(/\s*▾\s*$/,'').trim();
+    chip.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=chip.querySelector('.frange');
+      document.querySelectorAll('.fdd,.frange').forEach(function(d){d.remove();});
+      if(open){return;}
+      var p=document.createElement('div');p.className='frange';
+      p.innerHTML='<div class="rlbl">Khoảng thời lượng (giây)</div>'+
+        '<div class="rrow"><input class="rin" type="number" min="0" placeholder="Từ n1"><span class="rsep">→</span><input class="rin" type="number" min="0" placeholder="Đến n2"></div>'+
+        '<button class="rbtn">Áp dụng</button>';
+      p.addEventListener('click',function(ev){ev.stopPropagation();});
+      p.querySelector('.rbtn').addEventListener('click',function(){
+        var ins=p.querySelectorAll('.rin');var a=ins[0].value.trim(),b=ins[1].value.trim();
+        var txt=(a!==''||b!=='')?(chip.dataset.label+': '+(a||'0')+'–'+(b||'∞')+'s'):chip.dataset.label;
+        chip.textContent=txt+' ▾';chip.classList.toggle('active',a!==''||b!=='');
+        document.querySelectorAll('.frange').forEach(function(d){d.remove();});
+      });
+      chip.appendChild(p);
+      p.querySelector('.rin').focus();
+    });
+  });
+  document.addEventListener('click',function(){document.querySelectorAll('.fdd,.frange').forEach(function(d){d.remove();});});
 })();
 </script>
