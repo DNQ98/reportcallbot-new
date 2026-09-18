@@ -87,6 +87,34 @@
   .num{text-align:right;font-weight:700;}
   .dim{color:#B4BEC9;}
   .scode{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 9px;border-radius:5px;color:#fff;display:inline-block;}
+  /* ---- nút xem chi tiết KH ---- */
+  .khview{font:inherit;font-size:12px;font-weight:600;color:#2F6FED;background:#EAF1FE;border:1px solid #C7DBFB;border-radius:7px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:.12s;}
+  .khview:hover{background:#2F6FED;color:#fff;border-color:#2F6FED;}
+  /* ---- drawer chi tiết KH ---- */
+  #khOv{position:fixed;inset:0;background:rgba(15,23,42,.45);opacity:0;visibility:hidden;transition:.18s;z-index:120;}
+  #khOv.on{opacity:1;visibility:visible;}
+  #khDr{position:fixed;top:0;right:0;height:100%;width:520px;max-width:94vw;background:#fff;box-shadow:-8px 0 32px rgba(15,23,42,.22);transform:translateX(100%);transition:.24s cubic-bezier(.4,0,.2,1);z-index:121;display:flex;flex-direction:column;}
+  #khOv.on #khDr{transform:translateX(0);}
+  .khhd{padding:18px 22px;border-bottom:1px solid #EAECEF;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .khhd h3{margin:0;font-size:18px;color:#0F172A;}
+  .khhd .khsub{margin-top:3px;font-size:13px;color:#64748B;font-family:var(--mono);}
+  .khx{border:none;background:#F1F3F5;color:#475569;width:32px;height:32px;border-radius:8px;font-size:17px;cursor:pointer;flex:none;}
+  .khx:hover{background:#E2E6EA;}
+  .khbd{padding:18px 22px;overflow:auto;flex:1;}
+  .khsec{font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#94A3B8;margin:2px 0 10px;}
+  .khinfo{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-bottom:24px;}
+  .khinfo .kf{display:flex;flex-direction:column;gap:3px;}
+  .khinfo .kf label{font-size:11px;color:#94A3B8;}
+  .khinfo .kf span{font-size:13.5px;color:#1E293B;font-weight:600;}
+  .khcalls{border:1px solid #EAECEF;border-radius:10px;overflow:hidden;}
+  .khcall{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-top:1px solid #F1F3F5;}
+  .khcall:first-child{border-top:none;}
+  .khcall .kn{width:24px;height:24px;border-radius:50%;background:#EEF2F7;color:#475569;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .khcall .kt{font-size:13px;color:#0F172A;font-weight:600;}
+  .khcall .km{font-size:11.5px;color:#64748B;margin-top:2px;}
+  .khcall .kr{text-align:right;font-size:11.5px;color:#475569;font-family:var(--mono);}
+  .cstat{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:999px;}
+  .cstat.ok{background:#E3F4EC;color:#1C8F5F;} .cstat.no{background:#FBE7E3;color:#C8402F;} .cstat.busy{background:#FBF0DC;color:#B4720A;}
   .exe{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
   .exe::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;}
   .exe.done{background:var(--green-soft);color:var(--green);}
@@ -369,41 +397,47 @@
         <thead>
           <tr>
             <th class="stick">Họ tên</th>
-            <th>Mã KH</th><th>SĐT</th><th>Số lần gọi</th>
+            <th>Số điện thoại</th>
             <th>Phân loại (các cuộc gọi đã đi qua)</th>
-            <th>Ngày sinh</th><th>Giới tính</th><th>Loại sản phẩm</th><th>Tên SP/Dịch vụ</th><th>Ngày giải ngân</th><th>Số tiền giải ngân</th>
+            <th>Số lần gọi</th>
+            <th style="text-align:center">Chi tiết</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="stick"><b>Nguyễn Văn An</b></td>
-            <td>MAFC-KH-0001</td><td>0902 252 196</td><td class="num">1</td>
+            <td>0902 252 196</td>
             <td><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="scode" style="background:#2F80ED">PTP_TODAY</span></div></td>
-            <td>12/05/1990</td><td>Nam</td><td>Vay tiền mặt</td><td class="dim">—</td><td>26/05/2026</td><td class="num">30.000.000</td>
+            <td class="num">1</td>
+            <td style="text-align:center"><button class="khview" onclick="openKh(0)">👁 Xem chi tiết</button></td>
           </tr>
           <tr>
             <td class="stick"><b>Trần Thị Bình</b></td>
-            <td>MAFC-KH-0002</td><td>0902 252 232</td><td class="num">2</td>
+            <td>0902 252 232</td>
             <td><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="scode" style="background:#3AAFC9">RTP_NO_MONEY</span><span class="scode" style="background:#2F80ED">PTP_TODAY</span></div></td>
-            <td>03/09/1988</td><td>Nữ</td><td>Trả góp (CDL/TW)</td><td>Điện thoại Galaxy A</td><td>24/05/2026</td><td class="num">12.500.000</td>
+            <td class="num">2</td>
+            <td style="text-align:center"><button class="khview" onclick="openKh(1)">👁 Xem chi tiết</button></td>
           </tr>
           <tr>
             <td class="stick"><b>Lê Hoàng Cường</b></td>
-            <td>MAFC-KH-0003</td><td>0902 252 264</td><td class="num">1</td>
+            <td>0902 252 264</td>
             <td><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="scode" style="background:#3AAFC9">RTP_OTHER</span></div></td>
-            <td>21/11/1995</td><td>Nam</td><td>Vay tiền mặt</td><td class="dim">—</td><td>26/05/2026</td><td class="num">25.000.000</td>
+            <td class="num">1</td>
+            <td style="text-align:center"><button class="khview" onclick="openKh(2)">👁 Xem chi tiết</button></td>
           </tr>
           <tr>
             <td class="stick"><b>Phạm Thị Dung</b></td>
-            <td>MAFC-KH-0004</td><td>0902 252 211</td><td class="num">3</td>
+            <td>0902 252 211</td>
             <td><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="scode" style="background:#1E2A3A">INIT</span><span class="scode" style="background:#1E2A3A">INIT</span><span class="scode" style="background:#E93D82">CAB</span></div></td>
-            <td>17/02/1992</td><td>Nữ</td><td>Dịch vụ (SPL)</td><td>Khóa học tiếng Anh</td><td>25/05/2026</td><td class="num">8.000.000</td>
+            <td class="num">3</td>
+            <td style="text-align:center"><button class="khview" onclick="openKh(3)">👁 Xem chi tiết</button></td>
           </tr>
           <tr>
             <td class="stick"><b>Võ Minh Đức</b></td>
-            <td>MAFC-KH-0005</td><td>0902 252 245</td><td class="num">2</td>
+            <td>0902 252 245</td>
             <td><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="scode" style="background:#5296F2">PTP_DATE_TO_PAY</span><span class="scode" style="background:#2F80ED">PTP_TODAY</span></div></td>
-            <td>08/07/1985</td><td>Nam</td><td>Trả góp (CDL/TW)</td><td>Laptop Dell</td><td>24/05/2026</td><td class="num">18.900.000</td>
+            <td class="num">2</td>
+            <td style="text-align:center"><button class="khview" onclick="openKh(4)">👁 Xem chi tiết</button></td>
           </tr>
         </tbody>
       </table>
@@ -411,7 +445,7 @@
     <div class="note">
       Mỗi dòng = 1 <b>khách hàng</b> (gộp các cuộc gọi <b>trong phiên</b>). Cột <b>Phân loại</b> = <b>TOÀN BỘ phân loại mà các cuộc gọi của KH đã đi qua trong phiên</b> — mỗi cuộc gọi 1 phân loại, liệt kê theo thứ tự cuộc gọi (số chip = Số lần gọi). <b>Phân loại</b> là danh mục <b>1 cấp khai báo trong kịch bản</b> (thay cho 2 cột Last/Best action code trước đây).
       <br>• Lấy theo <b>LỊCH SỬ CẬP NHẬT phân loại TỪ PHIÊN NÀY</b> (không snapshot toàn hệ thống). VD: Trần Thị Bình 2 cuộc → <span class="scode" style="background:#3AAFC9">RTP_NO_MONEY</span> <span class="scode" style="background:#2F80ED">PTP_TODAY</span> (đi từ từ chối sang hứa trả).
-      <br>• Muốn xem phân loại từng cuộc chi tiết (thời điểm, kết quả) → mở tab <b>Lịch sử cuộc gọi</b> (mức cuộc gọi).
+      <br>• Bấm <b>👁 Xem chi tiết</b> để mở hồ sơ khách hàng: thông tin KH (mã KH, ngày sinh, giới tính, sản phẩm, ngày giải ngân, số tiền) + <b>lịch sử từng cuộc gọi trong phiên</b> (thời điểm · trạng thái cuộc gọi · phân loại · thời lượng).
     </div>
   </div>
 
@@ -477,6 +511,76 @@
     <div class="note">Mỗi dòng = 1 <b>câu nói (usersay)</b> trong cuộc gọi; các trường mức cuộc gọi (Call_id, Trạng thái, Action/Reason…) lặp theo dòng. Bảng <b>gộp từ 4 báo cáo nguồn</b>: Lịch sử cuộc gọi (Mã tổng đài, Time in call) · Phiên Callbot (<b>Phân loại</b> [1 cấp, khai báo trong kịch bản], Lý do kết thúc) · Tốc độ phản hồi (Total Process) · Dữ liệu đã phân tích (Intent_code, Intent, Accuracy, Entities). ⚠️ <b>Entities value</b> — CẦN LÀM THÊM (bóc giá trị chuẩn hóa của entity). Cuộn ngang; xuất Excel.</div>
   </div>
 </div>
+
+<!-- ===== Drawer chi tiết khách hàng ===== -->
+<div id="khOv" onclick="if(event.target===this)closeKh()">
+  <aside id="khDr">
+    <div class="khhd">
+      <div>
+        <h3 id="khName">—</h3>
+        <div class="khsub"><span id="khCode">—</span> · <span id="khPhone">—</span></div>
+      </div>
+      <button class="khx" onclick="closeKh()">✕</button>
+    </div>
+    <div class="khbd">
+      <div class="khsec">Thông tin khách hàng</div>
+      <div class="khinfo">
+        <div class="kf"><label>Ngày sinh</label><span id="khDob">—</span></div>
+        <div class="kf"><label>Giới tính</label><span id="khSex">—</span></div>
+        <div class="kf"><label>Loại sản phẩm</label><span id="khProd">—</span></div>
+        <div class="kf"><label>Tên SP/Dịch vụ</label><span id="khSvc">—</span></div>
+        <div class="kf"><label>Ngày giải ngân</label><span id="khDate">—</span></div>
+        <div class="kf"><label>Số tiền giải ngân</label><span id="khAmt">—</span></div>
+      </div>
+      <div class="khsec">Lịch sử cuộc gọi trong phiên (<span id="khCnt">0</span>)</div>
+      <div class="khcalls" id="khCalls"></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  // ---- dữ liệu chi tiết khách hàng (mockup) ----
+  var KH=[
+    {name:'Nguyễn Văn An',code:'MAFC-KH-0001',phone:'0902 252 196',dob:'12/05/1990',sex:'Nam',prod:'Vay tiền mặt',svc:'—',date:'26/05/2026',amt:'30.000.000',
+     calls:[{t:'27/08/2026 10:31',st:'ok',stl:'Nghe máy',pl:'PTP_TODAY',c:'#2F80ED',dur:'2:37'}]},
+    {name:'Trần Thị Bình',code:'MAFC-KH-0002',phone:'0902 252 232',dob:'03/09/1988',sex:'Nữ',prod:'Trả góp (CDL/TW)',svc:'Điện thoại Galaxy A',date:'24/05/2026',amt:'12.500.000',
+     calls:[{t:'26/08/2026 09:15',st:'ok',stl:'Nghe máy',pl:'RTP_NO_MONEY',c:'#3AAFC9',dur:'1:28'},
+            {t:'27/08/2026 10:02',st:'ok',stl:'Nghe máy',pl:'PTP_TODAY',c:'#2F80ED',dur:'2:00'}]},
+    {name:'Lê Hoàng Cường',code:'MAFC-KH-0003',phone:'0902 252 264',dob:'21/11/1995',sex:'Nam',prod:'Vay tiền mặt',svc:'—',date:'26/05/2026',amt:'25.000.000',
+     calls:[{t:'27/08/2026 11:00',st:'ok',stl:'Nghe máy',pl:'RTP_OTHER',c:'#3AAFC9',dur:'1:43'}]},
+    {name:'Phạm Thị Dung',code:'MAFC-KH-0004',phone:'0902 252 211',dob:'17/02/1992',sex:'Nữ',prod:'Dịch vụ (SPL)',svc:'Khóa học tiếng Anh',date:'25/05/2026',amt:'8.000.000',
+     calls:[{t:'26/08/2026 08:00',st:'no',stl:'Không nghe máy',pl:'INIT',c:'#1E2A3A',dur:'—'},
+            {t:'26/08/2026 14:00',st:'busy',stl:'Máy bận',pl:'INIT',c:'#1E2A3A',dur:'—'},
+            {t:'27/08/2026 09:30',st:'ok',stl:'Nghe máy',pl:'CAB',c:'#E93D82',dur:'0:45'}]},
+    {name:'Võ Minh Đức',code:'MAFC-KH-0005',phone:'0902 252 245',dob:'08/07/1985',sex:'Nam',prod:'Trả góp (CDL/TW)',svc:'Laptop Dell',date:'24/05/2026',amt:'18.900.000',
+     calls:[{t:'26/08/2026 10:00',st:'ok',stl:'Nghe máy',pl:'PTP_DATE_TO_PAY',c:'#5296F2',dur:'0:44'},
+            {t:'27/08/2026 09:00',st:'ok',stl:'Nghe máy',pl:'PTP_TODAY',c:'#2F80ED',dur:'1:00'}]}
+  ];
+  function openKh(i){
+    var k=KH[i];if(!k)return;
+    document.getElementById('khName').textContent=k.name;
+    document.getElementById('khCode').textContent=k.code;
+    document.getElementById('khPhone').textContent=k.phone;
+    document.getElementById('khDob').textContent=k.dob;
+    document.getElementById('khSex').textContent=k.sex;
+    document.getElementById('khProd').textContent=k.prod;
+    document.getElementById('khSvc').textContent=k.svc;
+    document.getElementById('khDate').textContent=k.date;
+    document.getElementById('khAmt').textContent=k.amt+' đ';
+    document.getElementById('khCnt').textContent=k.calls.length;
+    var h='';
+    k.calls.forEach(function(c,n){
+      h+='<div class="khcall"><div class="kn">'+(n+1)+'</div>'
+       +'<div><div class="kt"><span class="cstat '+c.st+'">'+c.stl+'</span> <span class="scode" style="background:'+c.c+'">'+c.pl+'</span></div>'
+       +'<div class="km">'+c.t+'</div></div>'
+       +'<div class="kr">'+c.dur+'</div></div>';
+    });
+    document.getElementById('khCalls').innerHTML=h;
+    document.getElementById('khOv').classList.add('on');
+  }
+  function closeKh(){document.getElementById('khOv').classList.remove('on');}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeKh();});
+</script>
 
 <script>
   // ---- tab switch ----
